@@ -10,9 +10,9 @@
     "night"
   ],
   "source": {
-    "type": "dengeai",
-    "name": "ilkerigz",
-    "url": "https://dengeai.com/library"
+    "type": "community",
+    "name": "ailker",
+    "url": "https://github.com/ilkerzg/awesome-video-prompts"
   },
   "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
   "status": "active",

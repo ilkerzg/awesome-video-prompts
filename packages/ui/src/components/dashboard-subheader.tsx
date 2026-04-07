@@ -116,13 +116,8 @@ export function DashboardSubheader({
 export const DashboardSubheaderVariants = {
   dashboard: {
     title: "Dashboard",
-    description: "Welcome to your dengeAI dashboard",
+    description: "Welcome to your dashboard",
     icon: DashboardSquare01Icon
-  },
-  models: {
-    title: "Models",
-    description: "Browse and manage AI models for your projects",
-    icon: BrainIcon
   },
   prompts: {
     title: "Custom Prompts", 
@@ -141,7 +136,7 @@ export const DashboardSubheaderVariants = {
   },
   docs: {
     title: "Documentation",
-    description: "Learn how to use dengeAI effectively",
+    description: "Learn how to use the platform effectively",
     icon: BookOpen01Icon
   },
   settings: {
@@ -153,9 +148,6 @@ export const DashboardSubheaderVariants = {
 
 // Helper function to get variant by route
 export function getSubheaderVariant(pathname: string) {
-  if (pathname.startsWith('/dashboard/models') || pathname === '/models') {
-    return DashboardSubheaderVariants.models
-  }
   if (pathname.startsWith('/dashboard/prompts') || pathname === '/prompts') {
     return DashboardSubheaderVariants.prompts
   }

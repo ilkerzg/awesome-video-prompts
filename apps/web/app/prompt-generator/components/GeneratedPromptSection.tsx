@@ -36,6 +36,8 @@ interface GeneratedPromptSectionProps {
   onUndo: () => void;
   onRemoveImage: () => void;
   onRemoveSegment: (category: string) => void;
+  llmModel?: string;
+  onLlmModelChange?: (model: string) => void;
 }
 
 export function GeneratedPromptSection({
@@ -50,6 +52,8 @@ export function GeneratedPromptSection({
   onUndo,
   onRemoveImage,
   onRemoveSegment,
+  llmModel,
+  onLlmModelChange,
 }: GeneratedPromptSectionProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
@@ -94,8 +98,25 @@ export function GeneratedPromptSection({
                 Your cinematic prompt is ready to use
               </p>
             </div>
-            <div className="flex justify-center sm:justify-end">
-              {/* Generate Prompt Button */}
+            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+              {/* LLM Model Selector */}
+              {onLlmModelChange && (
+                <select
+                  value={llmModel || ''}
+                  onChange={(e) => onLlmModelChange(e.target.value)}
+                  className="text-xs bg-background border border-border rounded-md px-2 py-1.5 text-muted-foreground"
+                >
+                  {[
+                    { id: 'anthropic/claude-sonnet-4.6', label: 'Sonnet 4.6' },
+                    { id: 'google/gemini-3-flash-preview', label: 'Gemini 3 Flash' },
+                    { id: 'google/gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro' },
+                    { id: 'openai/gpt-5.4-mini', label: 'GPT-5.4 Mini' },
+                  ].map(m => (
+                    <option key={m.id} value={m.id}>{m.label}</option>
+                  ))}
+                </select>
+              )}
+              {/* Enhance Button */}
               <Button
                 onClick={onGeneratePrompt}
                 disabled={isGeneratingPrompt}
@@ -104,14 +125,12 @@ export function GeneratedPromptSection({
                 {isGeneratingPrompt ? (
                   <>
                     <HugeiconsIcon icon={Loading03Icon} className="size-4 mr-2 animate-spin" />
-                    <span className="hidden xs:inline">Generating...</span>
-                    <span className="xs:hidden">...</span>
+                    <span>Enhancing...</span>
                   </>
                 ) : (
                   <>
                     <HugeiconsIcon icon={AiBeautifyFreeIcons} className="size-4 mr-2" />
-                    <span className="hidden xs:inline">Enhance Prompt</span>
-                    <span className="xs:hidden">Enhance</span>
+                    <span>Enhance</span>
                   </>
                 )}
               </Button>
@@ -137,6 +156,7 @@ export function GeneratedPromptSection({
                                     src={getDisplayImage()}
                                     alt="Reference"
                                     fill
+                                    sizes="(max-width: 1024px) 100vw, 192px"
                                     className="object-cover"
                                   />
                                   {/* Trash icon overlay */}

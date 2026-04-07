@@ -1,6 +1,6 @@
 export const APP_CONFIG = {
   GITHUB_REPO_URL: "https://github.com/ilkerzg/awesome-video-prompts",
-  X_LINK: "https://x.com/ilkerigz",
+  X_LINK: "https://x.com/ailker",
 };
 
 export const siteConfig = {

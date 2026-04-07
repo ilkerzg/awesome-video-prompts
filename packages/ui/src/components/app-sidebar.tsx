@@ -5,7 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   MagicWand01Icon,
   Image01Icon,
-  Database01Icon,
+
   NewTwitterIcon,
   Globe02Icon,
   Coffee01Icon,
@@ -13,6 +13,7 @@ import {
   RocketIcon,
   Github01Icon,
   SourceCodeIcon,
+  Film02Icon,
 } from "@hugeicons/core-free-icons"
 
  import { NavMain } from "@workspace/ui/components/nav-main"
@@ -48,14 +49,14 @@ const data = {
       icon: SourceCodeIcon,
     },
     {
+      title: "Multi-Shot Generator",
+      url: "/multi-shot",
+      icon: Film02Icon,
+    },
+    {
       title: "Prompt Gallery",
       url: "/prompts",
       icon: Image01Icon,
-    },
-    {
-      title: "Video Models",
-      url: "/models",
-      icon: Database01Icon,
     },
     {
       title: "Contribute",
@@ -66,13 +67,8 @@ const data = {
   socialLinks: [
     {
       title: "Follow me on X (Twitter)",
-      url: "https://x.com/ilkerigz",
+      url: "https://x.com/ailker",
       icon: NewTwitterIcon,
-    },
-    {
-      title: "DengeAI Waitlist",
-      url: "https://dengeai.com/waitlist",
-      icon: RocketIcon,
     },
     {
       title: "Buy me a coffee",

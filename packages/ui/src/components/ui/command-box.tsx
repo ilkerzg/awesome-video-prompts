@@ -123,53 +123,7 @@ export function CommandBox({ isOpen, onClose, onNavigate }: CommandBoxProps) {
     return () => clearTimeout(timer)
   }, [query, debouncedSearch])
 
-  // Quick action for category browsing
-  const quickActions: CommandItem[] = [
-    {
-      id: 'category-creative',
-      title: 'Browse Creative Models',
-      description: 'View all creative AI models',
-      icon: SparklesIcon,
-      category: 'Category',
-      action: () => {
-        onNavigate?.('/models?category=creative')
-        onClose()
-      }
-    },
-    {
-      id: 'category-editing',
-      title: 'Browse Editing Models',
-      description: 'View all editing AI models',
-      icon: LayersIcon,
-      category: 'Category',
-      action: () => {
-        onNavigate?.('/models?category=editing')
-        onClose()
-      }
-    },
-    {
-      id: 'category-text',
-      title: 'Browse Text Models',
-      description: 'View all text-based AI models',
-      icon: HologramIcon,
-      category: 'Category',
-      action: () => {
-        onNavigate?.('/models?category=text')
-        onClose()
-      }
-    },
-    {
-      id: 'category-video',
-      title: 'Browse Video Models',
-      description: 'View all video AI models',
-      icon: ShirtIcon,
-      category: 'Category',
-      action: () => {
-        onNavigate?.('/models?category=video')
-        onClose()
-      }
-    }
-  ]
+  const quickActions: CommandItem[] = []
 
   // Convert search results to command items
   const searchItems: CommandItem[] = searchResults.map(result => ({

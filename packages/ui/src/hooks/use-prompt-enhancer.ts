@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react"
-import { getFalApiKey } from "@workspace/ui/lib/fal-api-utils"
+import { callLlmRouter } from "@workspace/ui/lib/openrouter-utils"
 
 interface UsePromptEnhancerOptions {
   model?: string
@@ -7,40 +7,33 @@ interface UsePromptEnhancerOptions {
   onError?: (error: string) => void
 }
 
-interface FalResponse {
-  data: {
-    output: string
-  }
-  requestId: string
-}
+const SYSTEM_PROMPT = `You are an expert video-prompt composer specializing in AI video generation models (Seedance, Kling, Veo, Wan, Pixverse, etc.).
 
-interface FalQueueUpdate {
-  status: string
-  logs?: Array<{ message: string }>
-}
+Your job: take the user's rough notes, selected category fragments, and optional image description, then produce ONE polished, production-ready video generation prompt.
 
-interface FalClient {
-  config: (options: { credentials: string }) => void
-  subscribe: (endpoint: string, options: any) => Promise<FalResponse>
-}
+## Rules
+
+1. Output exactly one English paragraph, 80-150 words, comma-separated phrases. No line breaks, bullets, lists, labels, markdown, or commentary.
+2. Prioritize the user's explicit notes first, then selected category fragments, then image context.
+3. Every phrase must describe something visually concrete: subject, action, environment, lighting, camera work, motion, atmosphere, color, texture, or sound design.
+4. Use professional cinematography language: shot types (wide, medium, close-up, extreme close-up), camera movement (dolly, pan, crane, tracking, handheld, static), lens characteristics (shallow DOF, anamorphic, telephoto compression), lighting quality (rim, key, fill, backlight, ambient, practical).
+5. Include motion and temporal information: what happens, how it changes, what moves.
+6. End with a forward beat or transition hint when possible.
+7. Prefer strong specific nouns and active verbs over vague adjectives.
+8. Do not name AI models, categories, or quote fragment phrases verbatim — translate them into vivid visual cues.
+9. Match the implied medium: live-action realism, stylized animation, documentary, experimental, etc.
+10. Output ONLY the prompt paragraph. Nothing else.`
 
 export function usePromptEnhancer(options: UsePromptEnhancerOptions = {}) {
-  const { model = "openai/gpt-4o", onSuccess, onError } = options
-  
+  const { model = "google/gemini-3-flash-preview", onSuccess, onError } = options
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [logs, setLogs] = useState<string[]>([])
 
-  const enhancePrompt = useCallback(async (originalPrompt: string): Promise<string | null> => {
-    const apiKey = getFalApiKey()
-    
-    if (!apiKey) {
-      const errorMsg = "Please set your FAL API key first using the key icon in the header."
-      setError(errorMsg)
-      onError?.(errorMsg)
-      return null
-    }
-
+  const enhancePrompt = useCallback(async (
+    originalPrompt: string,
+    imageDescription?: string,
+  ): Promise<string | null> => {
     if (!originalPrompt.trim()) {
       const errorMsg = "Please provide a prompt to enhance."
       setError(errorMsg)
@@ -50,50 +43,27 @@ export function usePromptEnhancer(options: UsePromptEnhancerOptions = {}) {
 
     setIsLoading(true)
     setError(null)
-    setLogs([])
 
     try {
-      // Import FAL client dynamically to avoid SSR issues
-      const { fal }: { fal: FalClient } = await import("@fal-ai/client")
-      
-      // Configure FAL with the API key
-      fal.config({
-        credentials: apiKey
-      })
+      let userMessage = `User notes and fragments:\n${originalPrompt}`
 
-      const enhancementPrompt = `You are an expert video-prompt composer. Inputs: free-form user notes plus any number of fragment phrases drawn from JSON categories such as historical_period, style_family, camera_shot, camera_movement, lighting, mood, environment, weather, action_blocking, motion_logic, sound_direction, color_grade, lens, focus_control, composition, frame_rate_motion, time_of_day, transitions_editing, vfx, subject, style, culture_context, and others. Produce one cohesive English paragraph, 65–110 words inclusive, primarily comma-separated, no line breaks, bullets, labels, markdown, or meta commentary. Ground every decision in explicit user notes first, then fragment phrases; when fragments clash, choose the most coherent combination. Translate all fragments into vivid, precise sensory and kinetic cues—setting, subjects, materials, light, color, camera feel, movement, ambient sound, forward beat or transition—without naming categories or quoting phrases verbatim. Match tone and medium implied by the fragments, whether live-action, everyday handheld, stylised animation, or experimental abstract. Prefer strong nouns and verbs over vague adjectives; avoid proper nouns unless explicitly provided. Output nothing except the paragraph.
-
-User Input:
-${originalPrompt}
-
-Please generate the enhanced cinematic video prompt following the above guidelines.`
-
-      const result = await fal.subscribe("fal-ai/any-llm", {
-        input: {
-          prompt: enhancementPrompt,
-          model,
-          reasoning: false
-        },
-        logs: true,
-        onQueueUpdate: (update: FalQueueUpdate) => {
-          if (update.status === "IN_PROGRESS") {
-            const newLogs = update.logs?.map((log: { message: string }) => log.message) || []
-            setLogs(prev => [...prev, ...newLogs])
-          }
-        },
-      }) as FalResponse
-
-      if (result.data?.output) {
-        const enhancedPrompt = result.data.output.trim()
-        onSuccess?.(enhancedPrompt)
-        return enhancedPrompt
-      } else {
-        throw new Error("No enhanced prompt received from the API")
+      if (imageDescription) {
+        userMessage += `\n\nReference image description:\n${imageDescription}`
       }
 
+      const result = await callLlmRouter({
+        model,
+        systemPrompt: SYSTEM_PROMPT,
+        userPrompt: userMessage,
+        temperature: 0.85,
+      })
+
+      const enhanced = result.trim()
+      onSuccess?.(enhanced)
+      return enhanced
     } catch (err) {
       console.error("Error enhancing prompt:", err)
-      const errorMsg = err instanceof Error ? err.message : "Failed to enhance prompt. Please try again."
+      const errorMsg = err instanceof Error ? err.message : "Failed to enhance prompt."
       setError(errorMsg)
       onError?.(errorMsg)
       return null
@@ -102,20 +72,7 @@ Please generate the enhanced cinematic video prompt following the above guidelin
     }
   }, [model, onSuccess, onError])
 
-  const clearError = useCallback(() => {
-    setError(null)
-  }, [])
+  const clearError = useCallback(() => { setError(null) }, [])
 
-  const clearLogs = useCallback(() => {
-    setLogs([])
-  }, [])
-
-  return {
-    enhancePrompt,
-    isLoading,
-    error,
-    logs,
-    clearError,
-    clearLogs
-  }
+  return { enhancePrompt, isLoading, error, clearError }
 }

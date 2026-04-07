@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createGitHubIssueUrl, buildPromptContribution } from '@workspace/ui/lib/github-issue'
 import { HugeiconsIcon } from "@hugeicons/react"
 import { 
   GitBranchIcon, 
@@ -71,17 +72,17 @@ interface Category {
 }
 
 // Source type definition
-type SourceType = 'dengeai' | 'x' | 'reddit' | 'huggingface' | 'fal_ai' | 'github' | 'youtube' | 'original'
+type SourceType = 'community' | 'x' | 'reddit' | 'huggingface' | 'fal_ai' | 'github' | 'youtube' | 'original'
 
 // Source configurations
 const SOURCE_CONFIGS: Record<SourceType, { name: string; baseUrl: string; displayName: string; icon: string; color: string; description: string }> = {
-  dengeai: {
-    name: 'dengeai',
-    baseUrl: 'https://dengeai.com',
-    displayName: 'DengeAI',
+  community: {
+    name: 'community',
+    baseUrl: 'https://github.com/ilkerzg/awesome-video-prompts',
+    displayName: 'Community',
     icon: 'Globe02Icon',
     color: '#3B82F6',
-    description: 'DengeAI Community Library'
+    description: 'Community Library'
   },
   x: {
     name: 'x',
@@ -193,7 +194,7 @@ export default function ContributePage() {
     category: 'general',
     tags: [],
     sourceName: '',
-    sourceType: 'dengeai',
+    sourceType: 'community',
     sourceUrl: '',
     modelName: '',
     generationType: 'text_to_video',
@@ -327,7 +328,7 @@ export default function ContributePage() {
       source: {
         type: formData.sourceType,
         name: formData.sourceName || "contributor",
-        url: formData.sourceUrl || "https://dengeai.com/library"
+        url: formData.sourceUrl || "https://github.com/ilkerzg/awesome-video-prompts"
       },
       modelName: "fal-ai/wan/v2.2-5b/text-to-video",
       status: "active",
@@ -367,22 +368,30 @@ export default function ContributePage() {
 
   const createGitHubPR = async () => {
     if (generatedJson) {
-      // Copy JSON to clipboard first
-      await navigator.clipboard.writeText(generatedJson)
-      
-      // Generate filename from form data
-      const filename = `${formData.id || generateId(formData.title)}.json`
-      
-      // Create GitHub URL for new file PR
-      const githubUrl = `https://github.com/ilkerzg/awesome-video-prompts/new/main/apps/web/public/data/prompts/custom?filename=${filename}`
-      
-      // Show success message
-      toast.success('JSON copied to clipboard! Redirecting to GitHub...')
-      
-      // Small delay to show the toast
-      setTimeout(() => {
-        window.open(githubUrl, '_blank')
-      }, 1000)
+      const contribution = buildPromptContribution({
+        title: formData.title,
+        description: formData.description,
+        prompt: formData.prompt,
+        category: formData.category,
+        tags: formData.tags,
+        modelName: formData.modelName,
+        author: formData.sourceName,
+        sourceUrl: formData.sourceUrl,
+        videoUrl: formData.videoUrl,
+        thumbnailUrl: formData.thumbnailUrl,
+        generationType: formData.generationType,
+      })
+
+      const url = createGitHubIssueUrl({
+        type: 'custom-prompt',
+        title: formData.title,
+        description: formData.description,
+        jsonData: contribution,
+        author: formData.sourceName,
+      })
+
+      toast.success('Opening GitHub to submit your prompt...')
+      window.open(url, '_blank')
     }
   }
 
@@ -877,7 +886,7 @@ export default function ContributePage() {
               <>
                 <Button onClick={createGitHubPR} className="flex items-center gap-2 ">
                   <HugeiconsIcon icon={Github01Icon} className="h-4 w-4" />
-                 Copy & Create Pull Request
+                 Submit to Gallery
                 </Button>
                 
               </>

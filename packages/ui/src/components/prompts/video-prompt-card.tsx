@@ -171,47 +171,6 @@ export function VideoPromptCard({
     onNavigate?.(`/prompts?tags=${encodeURIComponent(tag)}`)
   }
 
-  const handleModelClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    
-    // Convert full model name to the expected key format
-    const getModelKey = (modelName: string): string => {
-      // Handle specific model mappings
-      const modelMappings: Record<string, string> = {
-        'fal-ai/wan/v2.2-5b/text-to-video': 'wan-v22-5b',
-        'fal-ai/wan/turbo/text-to-video': 'wan-turbo-text',
-        'fal-ai/wan/turbo/image-to-video': 'wan-turbo-image',
-        'fal-ai/ltx-video/13b': 'ltx-video-13b',
-        'fal-ai/veo/3-fast': 'veo-3-fast',
-        'fal-ai/vidu/q1': 'vidu-q1',
-        'fal-ai/pixverse/v4.5/text-to-video': 'pixverse-v45',
-        'fal-ai/kling-video/pro/text-to-video': 'kling-video-pro',
-        'fal-ai/minimax/hailuo-02-pro': 'minimax-hailuo-02-pro',
-        'fal-ai/seedance/v1-pro': 'seedance-v1-pro'
-      }
-      
-      // Check if we have a direct mapping
-      if (modelMappings[modelName]) {
-        return modelMappings[modelName]
-      }
-      
-      // Fallback: try to extract a reasonable key from the model name
-      if (modelName.startsWith('fal-ai/')) {
-        const parts = modelName.replace('fal-ai/', '').split('/')
-        // Remove common suffixes like 'text-to-video', 'image-to-video'
-        const filteredParts = parts.filter(part => 
-          !['text-to-video', 'image-to-video'].includes(part)
-        )
-        return filteredParts.join('-').replace(/\./g, '')
-      }
-      
-      return modelName
-    }
-    
-    const modelKey = getModelKey(prompt.modelName)
-    onNavigate?.(`/models/${modelKey}`)
-  }
 
   const handleCreatorClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -302,6 +261,15 @@ export function VideoPromptCard({
               {prompt.category}
             </StatusBadge>
           
+          {/* Multi-Shot Badge */}
+          {prompt.promptType === 'multi-shot' && (
+            <div className="absolute top-2 left-2 z-10">
+              <div className="px-1.5 py-0.5 bg-purple-500/90 backdrop-blur-sm text-[10px] text-white font-semibold rounded-md">
+                Multi-Shot
+              </div>
+            </div>
+          )}
+
           {/* Aspect Ratio Indicator */}
           {prompt.aspectRatio && (
             <div className="absolute top-2 right-12">
@@ -336,17 +304,15 @@ export function VideoPromptCard({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex flex-col items-center gap-1.5 min-w-0 flex-1 cursor-pointer" onClick={handleModelClick}>
+                    <div className="flex flex-col items-center gap-1.5 min-w-0 flex-1">
                       <HugeiconsIcon icon={VideoReplayIcon} className="w-5 h-5 text-foreground" />
-                      <button
-                        className="text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer truncate text-center leading-tight"
-                      >
+                      <span className="text-xs font-medium text-foreground truncate text-center leading-tight">
                         {getModelDisplayName(prompt.modelName)}
-                      </button>
+                      </span>
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>View {getModelDisplayName(prompt.modelName)} model details</p>
+                    <p>{getModelDisplayName(prompt.modelName)}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

@@ -16,7 +16,8 @@ import {
 import { VideoPromptCard } from "@workspace/ui/components/prompts/video-prompt-card"
 import { PromptDetailsDrawer } from "../../components/prompt-details-drawer"
 import { DashboardSubheader } from "@workspace/ui/components/dashboard-subheader"
-import { PromptsGridSkeleton, PageHeaderSkeleton, FiltersSkeleton, PaginationSkeleton } from "@workspace/ui/components/skeletons"
+import { PromptsGridSkeleton } from "@workspace/ui/components/skeletons"
+import { Skeleton } from "@workspace/ui/components/ui/skeleton"
 import { clientDataApi as dataApi, type CustomPrompt } from "../../lib/client-data-loader"
 import { getSourceUrl, getSourceDisplayName } from "../../types/source"
 import type { VideoPrompt } from "@workspace/ui/types/prompt"
@@ -231,12 +232,34 @@ function PromptsPageContent() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-1">
-        <PageHeaderSkeleton />
-        <FiltersSkeleton />
-        <PromptsGridSkeleton />
-        <PaginationSkeleton />
-      </div>
+      <main className="flex-1 flex flex-col min-h-0 overflow-auto">
+        <div className="flex-1 p-0 bg-background">
+          <div className="min-h-screen bg-muted/30">
+            {/* Header — matches DashboardSubheader */}
+            <div className="flex items-start gap-4 p-6 border-b border-border/50">
+              <Skeleton className="w-12 h-12 rounded-lg flex-shrink-0" />
+              <div className="flex-1">
+                <Skeleton className="h-7 w-48 mb-1.5" />
+                <Skeleton className="h-4 w-96" />
+              </div>
+            </div>
+            <div className="space-y-6 p-6">
+              {/* Search + Filters */}
+              <div className="space-y-4">
+                <Skeleton className="h-9 w-full rounded-md" />
+                <div className="flex flex-wrap gap-4">
+                  <Skeleton className="h-9 w-[180px] rounded-md" />
+                  <Skeleton className="h-9 w-[180px] rounded-md" />
+                  <Skeleton className="h-9 w-[180px] rounded-md" />
+                  <Skeleton className="h-9 w-20 rounded-md" />
+                </div>
+              </div>
+              <Skeleton className="h-4 w-36" />
+              <PromptsGridSkeleton />
+            </div>
+          </div>
+        </div>
+      </main>
     )
   }
 

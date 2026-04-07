@@ -27,7 +27,7 @@ export default function RootLayout({
       <head>
       <AnalyticsProvider />
 
-      <meta name="apple-mobile-web-app-title" content="dengeAI" />
+      <meta name="apple-mobile-web-app-title" content="Awesome Video Prompts" />
       </head>
       <body className={`${lexend.variable} bg-muted/30 antialiased`}>
         <SpeedInsights />

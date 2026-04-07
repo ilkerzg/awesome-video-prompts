@@ -44,7 +44,8 @@
     "react-resizable-panels": "^3.0.3",
     "recharts": "^3.1.0",
     "sonner": "^2.0.6",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "radix-ui": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.8",

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { key: promptId } = await params
   
   // Use simple metadata during build to avoid fetch issues
-  const title = `${promptId} | DengeAI`
+  const title = `${promptId} | Awesome Video Prompts`
   const description = "Professional AI video prompt for cinematic video generation with advanced parameters."
 
   return {

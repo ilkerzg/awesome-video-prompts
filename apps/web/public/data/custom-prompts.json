@@ -12,9 +12,9 @@
         "craftsmanship"
       ],
       "source": {
-        "type": "dengeai",
-        "name": "ilkerigz",
-        "url": "https://dengeai.com/library"
+        "type": "community",
+        "name": "ailker",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -46,9 +46,9 @@
         "atmospheric"
       ],
       "source": {
-        "type": "dengeai",
-        "name": "ilkerigz",
-        "url": "https://dengeai.com/library"
+        "type": "community",
+        "name": "ailker",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -82,9 +82,9 @@
         "cinematic"
       ],
       "source": {
-        "type": "dengeai",
-        "url": "https://dengeai.com/library",
-        "name": "ilkerigz"
+        "type": "community",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts",
+        "name": "ailker"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -119,9 +119,9 @@
         "documentary"
       ],
       "source": {
-        "type": "dengeai",
-        "url": "https://dengeai.com/library",
-        "name": "ilkerigz"
+        "type": "community",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts",
+        "name": "ailker"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -154,9 +154,9 @@
         "night"
       ],
       "source": {
-        "type": "dengeai",
-        "name": "ilkerigz",
-        "url": "https://dengeai.com/library"
+        "type": "community",
+        "name": "ailker",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -188,9 +188,9 @@
         "coastal"
       ],
       "source": {
-        "type": "dengeai",
-        "name": "ilkerigz",
-        "url": "https://dengeai.com/library"
+        "type": "community",
+        "name": "ailker",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -222,9 +222,9 @@
         "nature"
       ],
       "source": {
-        "type": "dengeai",
-        "name": "ilkerigz",
-        "url": "https://dengeai.com/library"
+        "type": "community",
+        "name": "ailker",
+        "url": "https://github.com/ilkerzg/awesome-video-prompts"
       },
       "modelName": "fal-ai/wan/v2.2-5b/text-to-video",
       "status": "active",
@@ -254,7 +254,7 @@
       "documentary"
     ],
     "sources": [
-      "dengeai"
+      "community"
     ],
     "supportedModels": [
       "fal-ai/wan/v2.2-5b/text-to-video"
@@ -275,7 +275,7 @@
       ]
     },
     "promptsBySource": {
-      "dengeai": [
+      "community": [
         "close-up-detail",
         "dramatic-backlight",
         "low-angle",
@@ -301,7 +301,7 @@
         "id": "close-up-detail",
         "title": "close-up detail",
         "category": "commercial",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "close-up detail",
           "tight frame with shallow depth of field and texture emphasis",
@@ -317,7 +317,7 @@
         "id": "dramatic-backlight",
         "title": "dramatic backlight",
         "category": "cinematic",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "dramatic backlight",
           "dim hangar with strong rim lighting and atmospheric beams",
@@ -333,7 +333,7 @@
         "id": "low-angle",
         "title": "low angle",
         "category": "cinematic",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "low angle",
           "great for heroic shots and emphasizing power. the low angle creates dramatic perspective and makes subjects appear more imposing.",
@@ -351,7 +351,7 @@
         "id": "natural-sunlight",
         "title": "natural sunlight",
         "category": "documentary",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "natural sunlight",
           "great for outdoor documentary and natural scenes. the realistic lighting approach avoids artificial enhancement for authentic feel.",
@@ -368,7 +368,7 @@
         "id": "neon-city-night",
         "title": "neon city night",
         "category": "cinematic",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "neon city night",
           "rain-slicked alley with neon signage and atmospheric bloom",
@@ -384,7 +384,7 @@
         "id": "soft-golden-hour",
         "title": "soft golden hour",
         "category": "cinematic",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "soft golden hour",
           "coastal overlook at golden hour with warm lighting and nostalgic atmosphere",
@@ -400,7 +400,7 @@
         "id": "wide-valley-shot",
         "title": "wide valley shot",
         "category": "documentary",
-        "source": "dengeai",
+        "source": "community",
         "searchTerms": [
           "wide valley shot",
           "broad valley view with layered depth and scale",

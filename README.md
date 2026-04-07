@@ -1,140 +1,111 @@
-# DengeAI - Video Prompt Generator
+# Awesome Video Prompts
 
-> **AI Video Prompt Engineering Platform**
+> **Open-Source AI Video Prompt Engineering Platform**
 
-A video prompt generator for AI video creation. Generate prompts using categories, enhance them with AI, or use them as-is. Contribute your own prompts through simple forms.
-
-**Important Note**: This is an extracted and refined version of a larger production system, open-sourced for the community. While thoroughly tested, edge cases and improvements are always welcome through contributions.
+Generate, enhance, and share professional video generation prompts. Build multi-shot cinematic sequences with AI. Contribute your own prompts to the community.
 
 ---
 
-## **Intelligent Architecture**
+## Features
 
-### **Core Systems**
-- **Category-Based Prompt Engine** - Modular prompt construction with 20+ specialized categories
-- **AI Enhancement Prompts** - FAL AI integration for semantic prompt optimization
-- **Image-to-Prompt Synthesis** - Computer vision-driven prompt generation from visual inputs
-- **Dynamic Model Support** - Abstracted model configurations for multiple AI video platforms
-- **Real-time Preview System** - Live prompt validation and preview generation
+- **Prompt Generator** — Category-based prompt construction with 22 cinematic element types, AI enhancement via LLM
+- **Multi-Shot Generator** — Design 3-shot cinematic sequences with Seedance 2.0 and Kling v3 Pro, including reference image generation
+- **JSON Prompt Generator** — Convert ideas into structured JSON format for video generation
+- **Prompt Gallery** — Community-curated video prompts with filtering, search, and video previews
+- **GitHub Issue Contributions** — One-click prompt sharing via pre-filled GitHub Issues with automated PR creation
 
-### **Technical Details**
-- **Next.js 15 + App Router** - Fully static export, no server required
-- **TypeScript Strict Mode** - Complete type safety across the entire codebase 
-- **Design System** - Consistent UI components with shadcn/ui and Tailwind CSS and some DengeAI based custom components
-- **Monorepo Architecture** - Turborepo for optimized build performance
+## Tech Stack
 
----
+- **Next.js 16** + App Router, Turbopack
+- **TypeScript** strict mode
+- **shadcn/ui** (new-york style) + Tailwind CSS v4 + unified `radix-ui` package
+- **Monorepo** — pnpm workspaces + Turborepo
+- **AI** — FAL API (image/video generation), OpenRouter via FAL (LLM)
+- **Zero backend** — All API calls client-side, static export, no database
 
+## Supported AI Models
 
----
+### Video Generation
+- **Seedance 2.0** — reference-to-video, image-to-video, text-to-video
+- **Kling v3 Pro** — multi_prompt shots + @Element references
 
-## **Contributing to DengeAI**
+### Image Generation
+- **Nano Banana Pro** / **Nano Banana 2** — text-to-image & image editing
+- **Seedream v5 Lite** — text-to-image & image editing
 
-> **This project thrives on community contributions. Your expertise can help improve prompt quality, fix edge cases, and expand functionality.**
-
-### **How to Contribute**
-
-#### **1. Prompt Contributions**
-Easy contribution through built-in forms:
-
-**Custom Prompts** - Complete video generation prompts
-- Use `/contribute/custom-prompt` form
-- Fill title, description, tags, and model
-- Generate JSON and submit via Pull Request
-
-**Base Prompts** - Individual prompt elements
-- Use `/contribute/base-prompt` form
-- Add high-quality prompt elements that combine into final prompts
-- Add options to existing categories (lighting, camera, mood, etc.)
-
-**Categories** - New prompt categories
-- Use `/contribute/base-prompt-category` and `/contribute/prompt-categories` forms
-- Create new categorization systems
-
-#### **2. Technical Improvements**
-Help refine the codebase and fix issues:
-
-- **Bug Fixes**: Report and fix edge cases, UI inconsistencies, or performance issues
-- **Feature Enhancements**: Improve existing functionality or add new capabilities
-- **Code Quality**: Optimize performance, improve TypeScript coverage, or enhance accessibility
-- **Documentation**: Improve code comments, add examples, or clarify usage patterns
-
-#### **3. Model Integration**
-Expand platform support:
-- Add new AI video generation model configurations for FAL.ai
-- Improve existing model parameter handling
-- Create model-specific prompt optimization logic
-
-### **Contribution Workflow**
-
-1. **Identify Contribution Type**
-   - Browse existing issues or create new ones
-   - Use the in-app contribution forms for prompts
-   - Check the codebase for TODOs or improvement opportunities
-
-2. **Prepare Your Contribution**
-   - For prompts: Use the built-in JSON generators
-   - For code: Follow TypeScript strict mode and existing patterns
-   - Test your changes thoroughly
-
-3. **Submit Pull Request**
-   - Clear, descriptive commit messages
-   - Reference related issues
-   - Include testing information
-   - Follow the established code style
-
-4. **Review Process**
-   - Automated checks for code quality and build success
-   - Community review for prompt quality and relevance
-   - Maintainer approval for technical changes
+### LLM (Prompt Engineering)
+- Sonnet 4.6, Gemini 3 Flash, Gemini 3.1 Pro, GPT-5.4 Mini
 
 ---
 
-## **Technical Setup**
+## Getting Started
 
-### **Prerequisites**
-- **Node.js** >= 22.17.1
-- **pnpm** >= 10.13.1
+### Prerequisites
+- **Node.js** >= 20
+- **pnpm** >= 10
 
-### **Development Commands**
+### Development
 ```bash
-pnpm dev          # Start development server
-pnpm build        # Production build with optimizations
-pnpm lint         # Code quality checks
-pnpm type-check   # TypeScript validation
+pnpm install
+pnpm dev          # http://localhost:3000
 ```
 
-### **Build Scripts**
-Contributed JSON files are automatically processed during build:
+### Build
 ```bash
-pnpm build-data           # Combine individual JSON contributions into optimized data files
-pnpm build-production     # Production data build with validation
-pnpm generate-thumbnails  # Generate thumbnail images for prompts
-pnpm validate-data        # Validate all JSON data structure
+pnpm build
 ```
 
-### **Environment Configuration**
-Copy `.env.example` to `.env.local` and configure:
-- `NEXT_PUBLIC_SITE_URL` - Your site URL (http://localhost:3000 for development)
-- `NEXT_PUBLIC_ANALYTICS_URL` - Analytics script URL for UMAMI (optional)
-- `NEXT_PUBLIC_ANALYTICS_WEBSITE_ID` - Analytics website ID for UMAMI (optional)
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID` - Google Analytics measurement ID (optional)
+### Environment
+Copy `.env.example` to `.env.local`:
+- `NEXT_PUBLIC_SITE_URL` — Your site URL
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Google Analytics (optional)
 
 ---
 
-## **Connect & Follow**
+## Contributing
 
-- **Twitter**: [@ilkerigz](https://x.com/ilkerigz) - Follow for updates and AI insights
-- **Hugging Face**: [ilkerzgi](https://huggingface.co/ilkerzgi) - AI models and datasets
+### Submit Prompts (One-Click)
+1. Use the in-app contribution forms at `/contribute`
+2. Click "Submit to Gallery" — opens a pre-filled GitHub Issue
+3. Maintainer adds `approved` label — GitHub Action creates a PR automatically
+
+### Types of Contributions
+- **Video Prompts** — Full prompts with video examples
+- **Multi-Shot Prompts** — Multi-shot sequences generated via the pipeline
+- **Prompt Elements** — Building blocks for the prompt generator (lighting, camera, mood, etc.)
+- **Categories** — New ways to organize prompts and elements
+
+### Code Contributions
+- Follow TypeScript strict mode and existing patterns
+- Test changes with `pnpm build`
+- Submit a PR with clear description
 
 ---
 
-## **License & Attribution**
+## Changelog
 
-MIT License - This project is open source and free to use, modify, and distribute.
-
-**Built with precision by [@ilkerigz](https://x.com/ilkerigz)** - Extracted from a DengeAI platform and refined for the open source community.
+### 2026-04-07
+- Multi-Shot Generator with full pipeline: LLM prompt planning, reference image generation, video generation
+- Seedance 2.0 + Kling v3 Pro video model support with smart endpoint selection
+- Agentic prompt system via OpenRouter (FAL-proxied) with retry, validation, and content policy handling
+- Reference image system: @Image/@Element hover preview tooltips + click-to-modal
+- GitHub Issue-based contribution system with automated PR via GitHub Actions
+- Prompt Gallery: Multi-Shot badge, updated skeleton components matching real card layout
+- Prompt Generator: LLM model selection (Sonnet 4.6, Gemini 3 Flash, Gemini 3.1 Pro, GPT-5.4 Mini)
+- Migrated to unified `radix-ui` package (shadcn/ui latest)
+- Upgraded Next.js 15 to 16.2.2
+- Removed Video Models page
+- Removed DengeAI branding, renamed to Awesome Video Prompts
+- Image `sizes` prop fixes for Next.js Image optimization
 
 ---
 
-*This project represents advanced prompt techniques refined through production use. Contributions from the community help push the boundaries of what's possible in AI video generation.*
+## License
+
+MIT License — Free to use, modify, and distribute.
+
+**Built by [@ailker](https://x.com/ailker)**
+
+---
+
+*Contributions from the community help push the boundaries of AI video generation.*

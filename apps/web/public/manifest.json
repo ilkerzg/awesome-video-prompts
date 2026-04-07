@@ -1,6 +1,6 @@
 {
-    "name": "DengeAI - Open-Source AI Video Prompt Generator",
-    "short_name": "DengeAI",
+    "name": "Awesome Video Prompts - AI Video Prompt Generator",
+    "short_name": "Awesome Video Prompts",
     "description": "Professional AI video prompt generator with curated prompts and models and video prompt library",
     "start_url": "/",
     "display": "standalone",

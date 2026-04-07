@@ -118,6 +118,7 @@ export function OptionsCarouselSection({
                                     src={option.cover_image}
                                     alt={option.type}
                                     fill
+                                    sizes="192px"
                                     className="object-cover transition-opacity duration-300"
                                   />
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createGitHubIssueUrl } from '@workspace/ui/lib/github-issue'
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/ui/card"
 import { Button } from "@workspace/ui/components/ui/button"
 import { Input } from "@workspace/ui/components/ui/input"
@@ -122,22 +123,14 @@ export default function BasePromptCategoryPage() {
 
   const createGitHubPR = async () => {
     if (generatedJson && categoryId) {
-      // Copy JSON to clipboard first
-      await navigator.clipboard.writeText(generatedJson)
-      
-      // Generate filename from category ID
-      const filename = `${categoryId}.json`
-      
-      // Create GitHub URL for new file PR
-      const githubUrl = `https://github.com/ilkerzg/awesome-video-prompts/new/main/apps/web/public/data/base-prompt-categories?filename=${filename}`
-      
-      // Show success message
-      toast.success('JSON copied to clipboard! Redirecting to GitHub...')
-      
-      // Small delay to show the toast
-      setTimeout(() => {
-        window.open(githubUrl, '_blank')
-      }, 1000)
+      const jsonData = JSON.parse(generatedJson)
+      const url = createGitHubIssueUrl({
+        type: 'element-category',
+        title: `Element Category: ${categoryId}`,
+        jsonData,
+      })
+      toast.success('Opening GitHub to submit your category...')
+      window.open(url, '_blank')
     }
   }
 

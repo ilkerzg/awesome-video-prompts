@@ -16,7 +16,7 @@ export function DynamicLogo() {
       const url = URL.createObjectURL(svgBlob)
       const link = document.createElement('a')
       link.href = url
-      link.download = 'dengeAI-logo.svg'
+      link.download = 'awesome-video-prompts-logo.svg'
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -33,7 +33,7 @@ export function DynamicLogo() {
       const url = URL.createObjectURL(pngBlob)
       const link = document.createElement('a')
       link.href = url
-      link.download = 'dengeAI-logo.png'
+      link.download = 'awesome-video-prompts-logo.png'
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -50,13 +50,13 @@ export function DynamicLogo() {
           <div className="flex items-center justify-center">
             <img 
               src="/logo-white.svg" 
-              alt="DengeAI Logo" 
+              alt="Logo"
               className="h-6 w-auto group-data-[collapsible=icon]:h-8"
             />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
             <span className="truncate font-semibold">Awesome Video Prompts</span>
-            <span className="truncate text-xs">by DengeAI</span>
+            <span className="truncate text-xs text-muted-foreground">Open Source</span>
           </div>
         </div>
       </ContextMenuTrigger>

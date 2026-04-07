@@ -23,7 +23,6 @@ export function PromptEnhancementIntegration() {
     enhancePrompt,
     isLoading,
     error,
-    logs,
     clearError
   } = usePromptEnhancer({
     onSuccess: (enhanced) => {
@@ -139,17 +138,6 @@ export function PromptEnhancementIntegration() {
               />
             </div>
 
-            {/* Processing Logs */}
-            {logs.length > 0 && (
-              <div className="bg-muted/50 p-2 rounded text-xs">
-                <div className="font-medium mb-1">Processing:</div>
-                {logs.slice(-3).map((log, index) => (
-                  <div key={index} className="text-muted-foreground">
-                    {log}
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* Enhanced Result */}
             {enhancedPrompt && (

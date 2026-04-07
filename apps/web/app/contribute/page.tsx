@@ -1,76 +1,90 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/ui/card"
-import { Button } from "@workspace/ui/components/ui/button"
+import { Card, CardContent } from "@workspace/ui/components/ui/card"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  AddCircleIcon, 
-  Settings02Icon, 
+import {
+  Settings02Icon,
   FileEditIcon,
   PaintBrushIcon,
   ArrowRight01Icon,
   VideoReplayIcon,
-  Image02Icon,
-  SparklesIcon
+  FavouriteIcon,
 } from "@hugeicons/core-free-icons"
+import { DashboardSubheader } from "@workspace/ui/components/dashboard-subheader"
+
+const items = [
+  {
+    title: 'Share Your Prompts',
+    description: 'Contribute video generation prompts that others can discover and use.',
+    icon: VideoReplayIcon,
+    path: '/contribute/custom-prompt',
+    count: 'Prompt Gallery',
+  },
+  {
+    title: 'Organize Categories',
+    description: 'Create new categories to help organize and filter prompts in the gallery.',
+    icon: Settings02Icon,
+    path: '/contribute/prompt-categories',
+    count: 'Gallery Filters',
+  },
+  {
+    title: 'Add Prompt Elements',
+    description: 'Contribute individual prompt building blocks for the prompt generator.',
+    icon: FileEditIcon,
+    path: '/contribute/base-prompt',
+    count: 'Generator Options',
+  },
+  {
+    title: 'Create Element Types',
+    description: 'Define new types of prompt elements for advanced prompt generator.',
+    icon: PaintBrushIcon,
+    path: '/contribute/base-prompt-category',
+    count: 'Generator Structure',
+  },
+]
 
 export default function ContributePage() {
   const router = useRouter()
 
-  const promptGallerySystem = [
-    {
-      id: 'custom-prompt',
-      title: 'Custom Prompt',
-      description: 'Add complete video prompts that users have created',
-      icon: VideoReplayIcon,
-      path: '/contribute/custom-prompt',
-      impact: 'Appears in Prompt Gallery as inspiration for other users',
-      whatYouAdd: 'Full video prompts with examples, thumbnails, and results',
-      example: 'A cinematic shot of a person walking through a foggy forest at golden hour',
-      affects: ['Prompt Gallery', 'User inspiration', 'Community sharing']
-    },
-    {
-      id: 'prompt-categories',
-      title: 'Prompt Categories',
-      description: 'Create categories to organize custom prompts in the gallery',
-      icon: Settings02Icon,
-      path: '/contribute/prompt-categories',
-      impact: 'Helps users find specific types of prompts in the gallery',
-      whatYouAdd: 'Category labels like "Cinematic", "Animation", "Documentary"',
-      example: 'Commercial, Artistic, Experimental, etc.',
-      affects: ['Prompt Gallery organization', 'Search filters', 'User navigation']
-    }
-  ]
-
-  const promptGeneratorSystem = [
-    {
-      id: 'base-prompt',
-      title: 'Prompt Elements',
-      description: 'Add specific prompt elements for the generator categories',
-      icon: FileEditIcon,
-      path: '/contribute/base-prompt',
-      impact: 'Users can select these options when building prompts',
-      whatYouAdd: 'Specific prompt elements that combine to create full prompts',
-      example: 'soft golden-hour lighting, medium shot, dolly forward',
-      affects: ['Prompt Generator options', 'User selections', 'Prompt building']
-    },
-    {
-      id: 'base-prompt-category',
-      title: 'Element Categories',
-      description: 'Create new category types for organizing prompt elements',
-      icon: PaintBrushIcon,
-      path: '/contribute/base-prompt-category',
-      impact: 'Creates new sections in the Prompt Generator',
-      whatYouAdd: 'Category types that group related prompt elements',
-      example: 'Camera Angle, Environment Color, Time Period, Weather',
-      affects: ['Generator structure', 'Category organization', 'User workflow']
-    }
-  ]
-
   return (
-    <div className="space-y-8">
-   
+    <div className="w-full">
+      <DashboardSubheader
+        title="Contribute"
+        description="Help build the world of AI video generation by sharing your prompts and ideas with the community."
+        icon={FavouriteIcon}
+        iconBoxVariant="purple"
+      />
+
+      <div className="px-6 py-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {items.map(item => (
+              <Card
+                key={item.title}
+                className="cursor-pointer hover:border-primary/40 transition-all group"
+                onClick={() => router.push(item.path)}
+              >
+                <CardContent className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                      <HugeiconsIcon icon={item.icon} className="size-5 text-foreground" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
+                        <HugeiconsIcon icon={ArrowRight01Icon} className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.description}</p>
+                      <span className="text-xs text-muted-foreground/60 mt-2 block">{item.count}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

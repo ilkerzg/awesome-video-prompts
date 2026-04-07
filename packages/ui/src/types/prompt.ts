@@ -35,4 +35,16 @@ export interface VideoPrompt {
   }
   notes?: string
   example_output_url?: string
+  promptType?: 'single' | 'multi-shot'
+  multiPrompt?: {
+    shots: Array<{
+      shot_number: number
+      prompt: string
+      duration: string
+      references?: string[]
+    }>
+    total_duration: string
+    base_image_prompt?: string
+    reference_image_prompts?: string[]
+  }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createGitHubIssueUrl } from '@workspace/ui/lib/github-issue'
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/ui/card"
 import { Button } from "@workspace/ui/components/ui/button"
 import { Input } from "@workspace/ui/components/ui/input"
@@ -207,40 +208,24 @@ export default function BasePromptPage() {
 
   const createGitHubPR = async () => {
     if (generatedJson && formData.values.length > 0) {
-      if (formData.values.length === 1) {
-        // Single file PR
-        const value = formData.values[0]
-        if (!value) return
-        const jsonData = {
-          value: value.value,
-          prompt: value.prompt,
-          example: value.example,
-          thumbnail: value.thumbnail,
-          category: selectedCategory
-        }
-        const jsonContent = JSON.stringify(jsonData, null, 2)
-        
-        // Copy JSON to clipboard first
-        await navigator.clipboard.writeText(jsonContent)
-        
-        // Generate filename from value
-        const filename = `${value.value.toLowerCase().replace(/[^a-z0-9]/g, '-')}.json`
-        
-        // Create GitHub URL for new file PR
-        const githubUrl = `https://github.com/ilkerzg/awesome-video-prompts/new/main/apps/web/public/data/base-prompts?filename=${filename}`
-        
-        // Show success message
-        toast.success('JSON copied to clipboard! Redirecting to GitHub...')
-        
-        // Small delay to show the toast
-        setTimeout(() => {
-          window.open(githubUrl, '_blank')
-        }, 1000)
-      } else {
-        // Multiple files - copy all content and provide instructions
-        await navigator.clipboard.writeText(generatedJson)
-        toast.success('All JSON files copied to clipboard! Create separate files on GitHub for each prompt.')
-      }
+      const elements = formData.values.map(v => ({
+        value: v.value,
+        prompt: v.prompt,
+        example: v.example,
+        thumbnail: v.thumbnail,
+        category: selectedCategory,
+      }))
+
+      const url = createGitHubIssueUrl({
+        type: 'prompt-element',
+        title: elements.length === 1
+          ? `${selectedCategory}: ${elements[0]?.value}`
+          : `${selectedCategory}: ${elements.length} elements`,
+        jsonData: elements.length === 1 ? elements[0] as any : { elements } as any,
+      })
+
+      toast.success('Opening GitHub to submit your element...')
+      window.open(url, '_blank')
     }
   }
 

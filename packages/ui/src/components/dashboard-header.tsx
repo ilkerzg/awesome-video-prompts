@@ -50,15 +50,6 @@ const navigationStructure = {
       { name: 'Recent Activity', href: '/dashboard/activity' }
     ]
   },
-  models: {
-    name: 'Models',
-    icon: BrainIcon,
-    href: '/models',
-    subpages: [
-      { name: 'Browse Models', href: '/models' },
-      { name: 'Prompt Generator', href: '/prompt-generator' },
-     ]
-  },
   prompts: {
     name: 'Custom Prompts',
     icon: PencilEdit02Icon,
@@ -191,17 +182,6 @@ export function DashboardHeader({
       if (segment === 'dashboard') {
         name = 'Dashboard'
         icon = DashboardSquare01Icon
-        actions = [
-          {
-            name: 'Copy URL',
-            icon: Copy01Icon,
-            action: () => copyUrlToClipboard(href)
-          }
-        ]
-      } else if (segment === 'models') {
-        name = 'Models'
-        icon = BrainIcon
-        subpages = navigationStructure.models.subpages
         actions = [
           {
             name: 'Copy URL',

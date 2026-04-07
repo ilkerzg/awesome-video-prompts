@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createGitHubIssueUrl } from '@workspace/ui/lib/github-issue'
 import { HugeiconsIcon } from "@hugeicons/react"
 import { 
   PaintBrushIcon,
@@ -353,22 +354,14 @@ export default function PromptCategoriesPage() {
 
   const createGitHubPR = async () => {
     if (generatedJson) {
-      // Copy JSON to clipboard first
-      await navigator.clipboard.writeText(generatedJson)
-      
-      // Generate filename from category id
-      const filename = `${formData.id || 'category'}.json`
-      
-      // Create GitHub URL for new file PR
-      const githubUrl = `https://github.com/ilkerzg/awesome-video-prompts/new/main/apps/web/public/data/prompt-categories?filename=${filename}`
-      
-      // Show success message
-      toast.success('JSON copied to clipboard! Redirecting to GitHub...')
-      
-      // Small delay to show the toast
-      setTimeout(() => {
-        window.open(githubUrl, '_blank')
-      }, 1000)
+      const jsonData = JSON.parse(generatedJson)
+      const url = createGitHubIssueUrl({
+        type: 'prompt-category',
+        title: `Prompt Category: ${formData.name || formData.id}`,
+        jsonData,
+      })
+      toast.success('Opening GitHub to submit your category...')
+      window.open(url, '_blank')
     }
   }
 
