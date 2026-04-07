@@ -198,6 +198,37 @@ function collectPromptRefs(text: string): string[] {
   return [...new Set(matches)];
 }
 
+function extractErrorMessage(err: any): string {
+  // Fal API errors: { body: { detail: [{ msg, type, loc }] } }
+  const detail = err?.body?.detail;
+  if (Array.isArray(detail) && detail.length > 0) {
+    const first = detail[0];
+    const msg = first?.msg || first?.message || '';
+    const type = first?.type || '';
+    const loc = Array.isArray(first?.loc) ? first.loc.join(' > ') : '';
+    const parts = [msg, type !== 'value_error' && type ? `(${type})` : '', loc ? `[${loc}]` : ''].filter(Boolean);
+    return parts.join(' ');
+  }
+  // Fal API errors: { detail: [{ msg }] } (direct)
+  if (Array.isArray(err?.detail)) {
+    const msg = err.detail[0]?.msg;
+    if (msg) return msg;
+  }
+  // Standard Error object
+  if (err instanceof Error && err.message && err.message !== 'ValidationError') {
+    return err.message;
+  }
+  // Error with body.message
+  if (err?.body?.message) return err.body.message;
+  // Stringify as fallback
+  if (typeof err === 'string') return err;
+  try {
+    const str = JSON.stringify(err, null, 2);
+    if (str && str !== '{}') return str.slice(0, 500);
+  } catch {}
+  return 'Pipeline failed. Please try again.';
+}
+
 function extractJsonObject(text: string): unknown {
   try {
     return JSON.parse(text.trim());
@@ -980,8 +1011,12 @@ export function useMultiShotPipeline() {
                   generatedImageUrls: [...generatedImageUrls],
                 });
               }
-            } catch (err) {
-              console.error(`Image ${i + 1} generation failed:`, err);
+            } catch (err: any) {
+              const imgError = extractErrorMessage(err);
+              console.error(`Image ${i + 1} generation failed:`, imgError);
+              safeUpdateState(runId, {
+                stageMessage: `Image ${i + 1} failed: ${imgError.slice(0, 100)}... Continuing...`,
+              });
               // Continue with other images
             }
           }
@@ -1175,10 +1210,11 @@ export function useMultiShotPipeline() {
             videoUrl = videoResult?.data?.video?.url || videoResult?.video?.url || null;
             break; // Success — exit retry loop
           } catch (videoErr: any) {
-            const errMsg = videoErr?.message || videoErr?.body?.detail?.[0]?.msg || String(videoErr);
+            const errMsg = extractErrorMessage(videoErr);
             const isContentPolicy = errMsg.includes('content_policy_violation') ||
               errMsg.includes('sensitive content') ||
-              errMsg.includes('partner_validation_failed');
+              errMsg.includes('partner_validation_failed') ||
+              errMsg.includes('likenesses of real people');
 
             if (isContentPolicy && videoAttempt < maxVideoRetries - 1) {
               // Retry: disable audio (common cause of "Output audio has sensitive content")
@@ -1199,15 +1235,14 @@ export function useMultiShotPipeline() {
           videoUrl,
           stageMessage: "Pipeline complete!",
         });
-      } catch (err) {
+      } catch (err: any) {
         console.error("Pipeline error:", err);
         if (activeRunRef.current === runId) {
+          // Extract the most useful error message from fal/API errors
+          const errorMessage = extractErrorMessage(err);
           updateState({
             stage: "error",
-            error:
-              err instanceof Error
-                ? err.message
-                : "Pipeline failed. Please try again.",
+            error: errorMessage,
           });
         }
       }
