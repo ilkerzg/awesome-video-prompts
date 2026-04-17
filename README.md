@@ -14,6 +14,14 @@ Generate, enhance, and share professional video generation prompts. Build multi-
 - **Prompt Gallery** — Community-curated video prompts with filtering, search, and video previews
 - **GitHub Issue Contributions** — One-click prompt sharing via pre-filled GitHub Issues with automated PR creation
 
+## Studio Apps
+
+- **Shorts Studio** (`/shorts`) — Script to 9:16 captioned, podcast-style short video in a single pipeline
+- **Podcast Studio** (`/podcast`) — Two-host script-to-video pipeline with alternating speaker framing
+- **Scene Builder** (`/scenario`) — Story to scene breakdown to keyframes to final render
+- **Multi-Shot (enhanced)** (`/multi-shot`) — Existing multi-shot flow, extended with new continuity helpers
+- **Blog** (`/blog`) — 77 technical posts on fal.ai models, pricing, and workflows with inline editorial illustrations
+
 ## Tech Stack
 
 - **Next.js 16** + App Router, Turbopack
@@ -83,6 +91,14 @@ Copy `.env.example` to `.env.local`:
 ---
 
 ## Changelog
+
+### 2026-04-17
+- Added Shorts Studio, Podcast Studio, Scene Builder, Multi-Shot (enhanced) studios
+- Added 77-post technical blog with validated fal.ai specs and pricing
+- Added 159 example video gallery with 15-category coverage
+- Added Settings + History pages (all localStorage, no backend)
+- Added editorial thumbnail generator powered by adhesive-alpha-126
+- Preserved contribute flow, privacy page, existing prompt pages
 
 ### 2026-04-07
 - Multi-Shot Generator with full pipeline: LLM prompt planning, reference image generation, video generation

@@ -251,3 +251,42 @@
     font-family: var(--font-sans);
   }
 }
+
+
+/* ──────────────────────────────────────────────────────────────
+   Studio Upgrade: additional design tokens used by the ported
+   studios (Shorts, Podcast, Scene Builder, Multi-Shot), the blog,
+   and gallery components. These extend (do NOT override) the
+   existing shadcn/Tailwind tokens above.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --border-soft: oklch(90% 0.004 286.32 / 0.72);
+  --border-soft-strong: oklch(90% 0.004 286.32 / 0.9);
+  --surface: oklch(1 0 0);
+  --surface-secondary: oklch(0.9524 0.0013 286.37);
+  --surface-tertiary: oklch(0.9373 0.0013 286.37);
+  --separator: oklch(92% 0.004 286.32);
+  --default: oklch(94% 0.001 286.375);
+  --success: oklch(0.7329 0.1935 150.81);
+  --warning: oklch(0.7819 0.1585 72.33);
+  --danger: oklch(0.6532 0.2328 25.74);
+  --field-background: oklch(1 0 0);
+  --radius-surface: 1.25rem;
+  --radius-control: 1rem;
+  /* Note: --accent already exists above; we keep that value. Studios read
+     the existing --accent via var() so the color follows the current theme. */
+}
+
+.dark {
+  --border-soft: oklch(30% 0.004 286.32 / 0.72);
+  --border-soft-strong: oklch(35% 0.004 286.32 / 0.9);
+  --surface: oklch(0.16 0.005 286);
+  --surface-secondary: oklch(0.19 0.005 286);
+  --surface-tertiary: oklch(0.22 0.005 286);
+  --separator: oklch(0.25 0.005 286);
+  --default: oklch(0.20 0.005 286);
+  --success: oklch(0.7329 0.1935 150.81);
+  --warning: oklch(0.7819 0.1585 72.33);
+  --danger: oklch(0.6532 0.2328 25.74);
+  --field-background: oklch(0.16 0.005 286);
+}

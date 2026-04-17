@@ -10,7 +10,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "noUncheckedIndexedAccess": false
   },
   "include": [
     "next-env.d.ts",
