@@ -1,0 +1,850 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+:root {
+  --radius: 0.75rem;
+  --field-radius: calc(var(--radius) * 1.5);
+  --radius-section: 1.5rem;
+  --radius-surface: 1.25rem;
+  --radius-control: 1rem;
+  --radius-control-inner: calc(var(--radius-control) - 0.25rem);
+  --radius-dialog: 1.75rem;
+  --border-soft: oklch(90% 0.004 286.32 / 0.72);
+  --border-soft-strong: oklch(90% 0.004 286.32 / 0.9);
+
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", "SFMono-Regular",
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --default-font-family: var(--font-sans);
+  --default-mono-font-family: var(--font-mono);
+
+  --background: oklch(0.9702 0 0);
+  --foreground: var(--eclipse);
+  --surface: var(--white);
+  --surface-foreground: var(--foreground);
+  --surface-secondary: oklch(0.9524 0.0013 286.37);
+  --surface-secondary-foreground: var(--foreground);
+  --surface-tertiary: oklch(0.9373 0.0013 286.37);
+  --surface-tertiary-foreground: var(--foreground);
+  --overlay: var(--white);
+  --overlay-foreground: var(--foreground);
+  --muted: oklch(0.5517 0.0138 285.94);
+  --default: oklch(94% 0.001 286.375);
+  --default-foreground: var(--eclipse);
+  --accent: oklch(0.7058 0.191 52.15);
+  --accent-foreground: var(--snow);
+  --success: oklch(0.7329 0.1935 150.81);
+  --success-foreground: var(--eclipse);
+  --warning: oklch(0.7819 0.1585 72.33);
+  --warning-foreground: var(--eclipse);
+  --danger: oklch(0.6532 0.2328 25.74);
+  --danger-foreground: var(--snow);
+  --segment: var(--white);
+  --segment-foreground: var(--eclipse);
+  --border: oklch(90% 0.004 286.32);
+  --separator: oklch(92% 0.004 286.32);
+  --focus: var(--accent);
+  --link: var(--foreground);
+
+  --gradient-hero: linear-gradient(135deg, color-mix(in oklab, var(--accent) 15%, var(--background)), var(--background));
+
+  --field-background: var(--white);
+  --field-foreground: oklch(0.2103 0.0059 285.89);
+  --field-placeholder: var(--muted);
+  --field-border-width: 2px;
+  --field-border: var(--border-soft);
+  --color-field-border-hover: var(--border-soft-strong);
+  --color-field-border-focus: color-mix(in oklab, var(--accent) 38%, var(--border));
+  --color-field-focus: var(--field-background);
+  --field-shadow: 0 0 0 0 transparent;
+
+  --surface-shadow: 0 0 0 0 transparent;
+  --overlay-shadow: 0 20px 50px -28px rgb(15 23 42 / 0.28),
+    0 10px 24px -18px rgb(15 23 42 / 0.16);
+
+  /* HeroUI defaults: spin 0.75s, skeleton 2s — calmer loading UI */
+  --animate-spin-fast: spin 1.2s linear infinite;
+  --animate-skeleton: skeleton 3.25s linear infinite;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.012em;
+}
+
+html.dark {
+  --border-soft: oklch(30% 0.004 286.32 / 0.72);
+  --border-soft-strong: oklch(35% 0.004 286.32 / 0.9);
+
+  --background: oklch(0.12 0.005 286);
+  --foreground: oklch(0.93 0.005 286);
+  --surface: oklch(0.16 0.005 286);
+  --surface-secondary: oklch(0.19 0.005 286);
+  --surface-tertiary: oklch(0.22 0.005 286);
+  --overlay: oklch(0.18 0.005 286);
+  --muted: oklch(0.58 0.01 286);
+  --default: oklch(0.20 0.005 286);
+  --default-foreground: oklch(0.93 0.005 286);
+  --segment: oklch(0.18 0.005 286);
+  --segment-foreground: oklch(0.93 0.005 286);
+  --border: oklch(30% 0.004 286.32);
+  --separator: oklch(26% 0.004 286.32);
+
+  --field-background: oklch(0.22 0.005 286);
+  --field-foreground: oklch(0.93 0.005 286);
+  --field-placeholder: var(--muted);
+  --color-field-border: var(--border-soft);
+
+  --overlay-shadow: 0 20px 50px -28px rgb(0 0 0 / 0.5),
+    0 10px 24px -18px rgb(0 0 0 / 0.35);
+
+  color-scheme: dark;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--default-font-family);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 24%, var(--background));
+  color: var(--foreground);
+}
+
+/* Speed up overlay transitions only — not spinners/skeletons */
+[data-slot="modal-backdrop"],
+[data-slot="drawer-backdrop"],
+[data-slot="alert-dialog-backdrop"],
+[data-slot="modal-dialog"],
+[data-slot="drawer-dialog"],
+[data-slot="alert-dialog-dialog"],
+[data-slot="popover-content"],
+[data-slot="tooltip-content"],
+[data-slot="select-popover"],
+[data-slot="dropdown-popover"],
+[data-slot="tabs-indicator"] {
+  transition-duration: 100ms !important;
+  animation-duration: 100ms !important;
+}
+
+@layer components {
+  .year-picker-scroll [data-slot="calendar-year-picker-grid"] {
+    position: relative;
+  }
+
+  .button {
+    @apply h-[52px] px-6 text-[15px] font-semibold md:h-12;
+    border-radius: var(--radius-control);
+    letter-spacing: -0.018em;
+  }
+
+  .button--sm {
+    @apply h-11 px-4 text-sm md:h-10;
+    border-radius: calc(var(--radius-control) - 0.125rem);
+  }
+
+  .button--lg {
+    @apply h-[58px] px-7 text-base md:h-14;
+    border-radius: calc(var(--radius-control) + 0.125rem);
+  }
+
+  .button--icon-only {
+    @apply w-[52px] p-0 md:w-12;
+  }
+
+  .button--icon-only.button--sm {
+    @apply w-11 md:w-10;
+  }
+
+  .button--icon-only.button--lg {
+    @apply w-[58px] md:w-14;
+  }
+
+  .button--primary {
+    background-color: var(--foreground);
+    color: var(--background);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.12), inset 0 1px 0 0 rgb(255 255 255 / 0.08);
+    border: 1px solid color-mix(in oklab, var(--foreground) 80%, transparent);
+  }
+
+  .button--primary:hover,
+  .button--primary[data-hovered="true"] {
+    background-color: color-mix(in oklab, var(--foreground) 85%, var(--accent));
+  }
+
+  .button--secondary {
+    background-color: var(--default);
+    color: var(--foreground);
+  }
+
+  .button--secondary:hover,
+  .button--secondary[data-hovered="true"] {
+    background-color: color-mix(in oklab, var(--default) 80%, var(--foreground));
+  }
+
+  .button--outline {
+    border-width: 2.25px;
+    border-color: var(--border-soft);
+    background-color: transparent;
+    color: var(--foreground);
+  }
+
+  .button--outline:hover,
+  .button--outline[data-hovered="true"] {
+    border-color: var(--border-soft-strong);
+    background-color: color-mix(in oklab, var(--default) 55%, var(--background));
+  }
+
+  .button--ghost:hover,
+  .button--ghost[data-hovered="true"] {
+    background-color: color-mix(in oklab, var(--default) 70%, var(--background));
+  }
+
+  .input {
+    @apply min-h-[52px] px-4 py-3.5 text-[15px] md:min-h-12;
+    border-radius: var(--radius-control);
+  }
+
+  .textarea {
+    @apply min-h-28 px-4 py-3.5 text-[15px];
+    border-radius: var(--radius-control);
+  }
+
+  .select__trigger {
+    @apply min-h-[52px] px-4 py-3.5 text-[15px] md:min-h-12;
+    border-radius: var(--radius-control);
+  }
+
+  .select__value {
+    @apply text-[15px];
+  }
+
+  .select__popover,
+  .dropdown__popover,
+  .popover__content {
+    @apply border;
+    border-radius: calc(var(--radius-surface) + 0.125rem);
+    border-color: var(--border-soft);
+  }
+
+  .input-group {
+    @apply min-h-[52px] text-[15px] md:min-h-12;
+    border-radius: var(--radius-control);
+    border-width: 2px;
+    border-color: var(--color-field-border);
+  }
+
+  .input-group__input {
+    @apply px-4 py-3.5 text-[15px];
+  }
+
+  .input-group:has(.input-group__prefix) .input-group__input {
+    padding-left: 0.875rem;
+  }
+
+  .input-group:has(.input-group__suffix) .input-group__input {
+    padding-right: 0.875rem;
+  }
+
+  .input-group__prefix,
+  .input-group__suffix {
+    @apply px-4 py-3.5 text-[15px];
+    min-width: 2.9rem;
+    font-weight: 500;
+  }
+
+  .combo-box__input-group,
+  .date-input-group {
+    @apply min-h-[52px] md:min-h-12;
+    border-radius: var(--radius-control);
+    border-width: 2px;
+    border-color: var(--color-field-border);
+  }
+
+  .combo-box__input-group {
+    background-color: var(--field-background);
+    padding-inline: 0.125rem;
+  }
+
+  .combo-box [data-slot="input"] {
+    min-height: calc(52px - 4px);
+    border: 0;
+    border-radius: calc(var(--radius-control) - 0.125rem);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .combo-box [data-slot="input"]:focus,
+  .combo-box [data-slot="input"][data-focus] {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .combo-box__trigger {
+    right: 0.375rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Autocomplete: match ComboBox / input field height and “tok” field look */
+  .autocomplete__trigger {
+    @apply min-h-[52px] px-4 py-3.5 text-[15px] md:min-h-12;
+    border-radius: var(--radius-control);
+    border-width: 2px;
+    border-color: var(--color-field-border);
+    background-color: var(--field-background);
+    box-shadow: none;
+  }
+
+  .autocomplete__trigger:has(.autocomplete__indicator) {
+    padding-right: 2.5rem;
+  }
+
+  .autocomplete__value {
+    @apply text-[15px] sm:text-[15px];
+  }
+
+  .autocomplete__indicator {
+    right: 0.375rem;
+    padding-right: 0.75rem;
+  }
+
+  .autocomplete__clear-button {
+    @apply size-5;
+  }
+
+  /* Secondary variant: same field surface as primary (ComboBox-style), not flat gray */
+  .autocomplete--secondary .autocomplete__trigger {
+    background-color: var(--field-background);
+    --autocomplete-trigger-bg: var(--field-background);
+    --autocomplete-trigger-bg-hover: var(--field-background);
+    --autocomplete-trigger-bg-focus: var(--color-field-focus);
+    box-shadow: none;
+  }
+
+  @media (hover: hover) {
+    .autocomplete--secondary
+      .autocomplete__trigger:hover:not(:has(.autocomplete__clear-button:hover)),
+    .autocomplete--secondary
+      .autocomplete__trigger[data-hovered="true"]:not(
+        :has(.autocomplete__clear-button:hover)
+      ) {
+      background-color: var(--field-background);
+      border-color: var(--color-field-border-hover);
+    }
+  }
+
+  .autocomplete--secondary .autocomplete__trigger:focus-visible:not(:focus),
+  .autocomplete--secondary .autocomplete__trigger[data-focus-visible="true"] {
+    background-color: var(--color-field-focus);
+  }
+
+  /* ListBox: override HeroUI rounded-2xl on every row (full pill on hover). Pin first/last
+     row edges to the menu; inner corners stay at the same small row radius. */
+  [data-slot="list-box"] > .list-box-item,
+  .list-box > .list-box-item {
+    border-radius: 0.375rem;
+  }
+
+  [data-slot="list-box"] > .list-box-item:first-child,
+  .list-box > .list-box-item:first-child {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+  }
+
+  [data-slot="list-box"] > .list-box-item:last-child,
+  .list-box > .list-box-item:last-child {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  [data-slot="list-box"] > .list-box-item:only-child,
+  .list-box > .list-box-item:only-child {
+    border-radius: 0.375rem;
+  }
+
+  .card {
+    @apply border-0 shadow-none;
+    border-radius: var(--radius-surface);
+    background-color: var(--surface);
+  }
+
+  .chip,
+  .tag {
+    @apply rounded-xl;
+  }
+
+  .tabs__list {
+    @apply border;
+    border-radius: calc(var(--radius-control) + 0.125rem);
+    border-width: 2px;
+    border-color: var(--border-soft);
+    background-color: var(--default);
+  }
+
+  .tabs__tab {
+    border-radius: var(--radius-control-inner);
+  }
+
+  .tabs__indicator {
+    border-radius: var(--radius-control-inner);
+  }
+
+  .tabs--secondary .tabs__list[data-orientation="horizontal"] {
+    border-bottom-width: 2px;
+    border-color: var(--border-soft-strong);
+  }
+
+  .tabs--secondary .tabs__list[data-orientation="vertical"] {
+    border-left-width: 2px;
+    border-color: var(--border-soft-strong);
+  }
+
+  .checkbox__control {
+    @apply size-[22px] rounded-[7px];
+    border-width: 2px;
+  }
+
+  .radio__control {
+    @apply size-[22px];
+    border-width: 2px;
+  }
+
+  .switch__control {
+    @apply h-7 w-[52px] rounded-full;
+  }
+
+  .switch__thumb {
+    @apply size-[22px];
+  }
+
+  .input-otp__slot {
+    @apply size-[52px] text-lg md:size-12;
+    border-radius: var(--radius-control);
+    border-width: 2px;
+  }
+
+  .table-root {
+    border-radius: calc(var(--radius-surface) + 0.125rem);
+    overflow: clip;
+  }
+
+  .table__body tr:first-child td:first-child {
+    border-top-left-radius: 0 !important;
+  }
+
+  .table__body tr:first-child td:last-child {
+    border-top-right-radius: 0 !important;
+  }
+
+  .accordion {
+    @apply border shadow-none;
+    border-radius: calc(var(--radius-surface) + 0.125rem);
+    border-color: var(--border-soft);
+    background-color: var(--surface);
+  }
+
+  .modal__container {
+    border-radius: var(--radius-dialog);
+  }
+
+  [data-slot="modal-backdrop"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  [data-slot="modal-backdrop"] .modal__container {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 100%;
+    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .modal__dialog {
+    width: min(28rem, calc(100vw - 2rem)) !important;
+    max-width: min(28rem, calc(100vw - 2rem)) !important;
+    margin-inline: auto !important;
+    box-sizing: border-box;
+    border-radius: var(--radius-dialog);
+    background-color: var(--surface);
+    color: var(--foreground);
+    box-shadow: none;
+    border: 2px solid var(--border-soft-strong);
+    padding: 1.5rem 1.75rem;
+  }
+
+  .modal__heading {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+
+  .modal__body {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .drawer__dialog {
+    background-color: var(--surface);
+    color: var(--foreground);
+    box-shadow: none;
+    border: 2px solid var(--border-soft-strong);
+  }
+
+  .drawer__content--bottom .drawer__dialog {
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    border-top-left-radius: var(--radius-dialog);
+    border-top-right-radius: var(--radius-dialog);
+  }
+
+  /* Alert dialog: HeroUI injects a stray " " text sibling next to the container, and the
+     container uses flex-1 — together they kill horizontal centering. Shrink-wrap the
+     container and force backdrop to center all flex items. Beat HeroUI/Tailwind w-full. */
+
+  [data-slot="alert-dialog-backdrop"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  [data-slot="alert-dialog-backdrop"] .alert-dialog__container {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 100%;
+    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .alert-dialog__dialog {
+    width: min(28rem, calc(100vw - 2rem)) !important;
+    max-width: min(28rem, calc(100vw - 2rem)) !important;
+    margin-inline: auto !important;
+    box-sizing: border-box;
+    border-radius: var(--radius-dialog);
+    background-color: var(--surface);
+    box-shadow: none;
+    border: 2px solid var(--border-soft-strong);
+    padding: 1.5rem 1.75rem;
+  }
+
+  .alert {
+    @apply shadow-none;
+    border-radius: var(--radius-surface);
+    border: 1.5px solid var(--border-soft);
+    background-color: color-mix(in oklab, var(--default) 62%, var(--background));
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .alert__indicator {
+    @apply shrink-0;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-top: 0.125rem;
+    border-radius: calc(var(--radius-control) - 0.125rem);
+    background-color: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--border-soft);
+  }
+
+  .alert__title {
+    color: var(--foreground);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+
+  .alert__description {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--foreground);
+    opacity: 0.72;
+    line-height: 1.55;
+  }
+
+  /* Standalone field / form error block (ErrorMessage + title) */
+  .error-message-panel {
+    display: flex;
+    max-width: 28rem;
+    gap: 0.875rem;
+    align-items: flex-start;
+    padding: 1rem 1.125rem;
+    border-radius: var(--radius-surface);
+    border: 2px solid color-mix(in oklab, var(--danger) 32%, var(--border-soft-strong));
+    background-color: color-mix(in oklab, var(--danger) 9%, var(--surface));
+  }
+
+  .error-message-panel__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-top: 0.0625rem;
+    border-radius: var(--radius-control-inner);
+    color: var(--danger);
+    background-color: color-mix(in oklab, var(--danger) 16%, var(--surface));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--danger) 22%, transparent);
+  }
+
+  .error-message-panel__title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+
+  .error-message-panel .error-message {
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: color-mix(in oklab, var(--danger) 82%, var(--foreground));
+  }
+
+  /* Indeterminate progress — slower sweep / spin */
+  .progress-bar:not([aria-valuenow]) .progress-bar__fill {
+    animation-duration: 2.25s;
+  }
+
+  .progress-circle:not([aria-valuenow]) .progress-circle__track {
+    animation-duration: 1.35s;
+  }
+
+  .skeleton.skeleton--pulse {
+    animation-duration: 2.25s !important;
+  }
+
+  .alert--default {
+    border-color: var(--border-soft);
+    background-color: color-mix(in oklab, var(--default) 68%, var(--background));
+  }
+
+  .alert--default .alert__indicator {
+    color: var(--foreground);
+    background-color: color-mix(in oklab, var(--default) 32%, var(--background));
+  }
+
+  .alert--accent {
+    border-color: color-mix(in oklab, var(--accent) 30%, var(--border));
+    background-color: color-mix(in oklab, var(--accent) 12%, var(--background));
+  }
+
+  .alert--accent .alert__indicator {
+    color: var(--accent);
+    background-color: color-mix(in oklab, var(--accent) 18%, var(--background));
+  }
+
+  .alert--success {
+    border-color: color-mix(in oklab, var(--success) 30%, var(--border));
+    background-color: color-mix(in oklab, var(--success) 12%, var(--background));
+  }
+
+  .alert--success .alert__indicator {
+    color: var(--success);
+    background-color: color-mix(in oklab, var(--success) 18%, var(--background));
+  }
+
+  .alert--warning {
+    border-color: color-mix(in oklab, var(--warning) 35%, var(--border));
+    background-color: color-mix(in oklab, var(--warning) 16%, var(--background));
+  }
+
+  .alert--warning .alert__indicator {
+    color: var(--warning);
+    background-color: color-mix(in oklab, var(--warning) 22%, var(--background));
+  }
+
+  .alert--danger {
+    border-color: color-mix(in oklab, var(--danger) 30%, var(--border));
+    background-color: color-mix(in oklab, var(--danger) 12%, var(--background));
+  }
+
+  .alert--danger .alert__indicator {
+    color: var(--danger);
+    background-color: color-mix(in oklab, var(--danger) 18%, var(--background));
+  }
+
+  .toast {
+    @apply border;
+    border-radius: var(--radius-surface);
+    border-color: var(--border-soft);
+    box-shadow: var(--overlay-shadow);
+  }
+
+  .pagination__link {
+    border-radius: var(--radius-control);
+  }
+
+  .navigation-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .navigation-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
+    }
+  }
+
+  .navigation-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1.5px solid var(--border-soft);
+    border-radius: calc(var(--radius-surface) - 0.125rem);
+    background: color-mix(in oklab, var(--surface-secondary) 35%, var(--background));
+    padding: 1.25rem;
+  }
+
+  .navigation-breadcrumbs {
+    flex-wrap: wrap;
+    gap: 0.125rem;
+  }
+
+  .navigation-breadcrumbs .breadcrumbs__item {
+    gap: 0.375rem;
+    padding-inline: 0;
+  }
+
+  .navigation-breadcrumbs .breadcrumbs__link {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .navigation-breadcrumbs .breadcrumbs__link[data-current="true"] {
+    color: var(--foreground);
+  }
+
+  .navigation-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .navigation-pagination {
+    width: auto;
+    --navigation-pagination-border-width: 1.5px;
+    --navigation-pagination-shell-radius: 999px;
+    --navigation-pagination-item-radius: calc(var(--radius-control) - 0.1875rem);
+  }
+
+  .navigation-pagination .pagination__content {
+    gap: 0.125rem;
+    border: var(--navigation-pagination-border-width) solid var(--border-soft);
+    border-radius: var(--navigation-pagination-shell-radius);
+    background: color-mix(in oklab, var(--default) 72%, var(--background));
+    padding: 0.1875rem;
+  }
+
+  .navigation-pagination .pagination__link,
+  .navigation-pagination .pagination__ellipsis {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--navigation-pagination-item-radius);
+    font-size: 1rem;
+  }
+
+  .navigation-pagination .pagination__link {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .navigation-pagination .pagination__link[data-active="true"] {
+    background: var(--surface);
+    color: var(--foreground);
+    box-shadow: none;
+    outline: var(--navigation-pagination-border-width) solid var(--border-soft);
+    outline-offset: calc(var(--navigation-pagination-border-width) * -1);
+  }
+
+  .navigation-pagination .pagination__ellipsis {
+    color: var(--muted);
+  }
+
+  .navigation-pagination .pagination__link--nav,
+  .navigation-pagination__edge {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding-inline: 0;
+    border-radius: var(--navigation-pagination-item-radius);
+    color: var(--foreground);
+    background: transparent;
+  }
+
+  .navigation-pagination .pagination__link--nav:hover,
+  .navigation-pagination .pagination__link--nav[data-hovered="true"],
+  .navigation-pagination__edge:hover,
+  .navigation-pagination__edge[data-hovered="true"] {
+    background: color-mix(in oklab, var(--default) 38%, var(--background));
+  }
+}
+
+/* ────────────────────────────────────────────────────────── */
+/*  Twitter-style Like button animation                      */
+/* ────────────────────────────────────────────────────────── */
+
+@keyframes heart-pop {
+  0%   { transform: scale(1);   }
+  20%  { transform: scale(0.6); }
+  50%  { transform: scale(1.35); }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1);   }
+}
+
+.heart-pop {
+  animation: heart-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes heart-ring {
+  0%   { transform: scale(0.3); opacity: 1; border-width: 4px; }
+  60%  { opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; border-width: 1px; }
+}
+
+.heart-ring {
+  animation: heart-ring 0.5s ease-out forwards;
+}
+
+@keyframes heart-particle {
+  0% {
+    transform: rotate(var(--angle)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateY(-14px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.heart-particle {
+  animation: heart-particle 0.55s ease-out forwards;
+  transform-origin: center;
+}

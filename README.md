@@ -1,111 +1,86 @@
 # Awesome Video Prompts
 
-> **Open-Source AI Video Prompt Engineering Platform**
+> **Breaking Changes Notice** — This release replaces the previous Turborepo monorepo (`apps/web`, `packages/*`) and legacy pages (`/prompts`, `/prompt-generator`, `/contribute/*`, `/privacy`) with a flat Next.js 15 application. Old URLs will 404 until redirects ship in a follow-up.
 
-Generate, enhance, and share professional video generation prompts. Build multi-shot cinematic sequences with AI. Contribute your own prompts to the community.
-
----
+A complete AI video generation platform built on [fal.ai](https://fal.ai). Go from an idea to a finished shot (or a whole multi-shot sequence) in minutes, with a curated library of prompts, models, and editorial guides to guide you along the way.
 
 ## Features
 
-- **Prompt Generator** — Category-based prompt construction with 22 cinematic element types, AI enhancement via LLM
-- **Multi-Shot Generator** — Design 3-shot cinematic sequences with Seedance 2.0 and Kling v3 Pro, including reference image generation
-- **JSON Prompt Generator** — Convert ideas into structured JSON format for video generation
-- **Prompt Gallery** — Community-curated video prompts with filtering, search, and video previews
-- **GitHub Issue Contributions** — One-click prompt sharing via pre-filled GitHub Issues with automated PR creation
+Four purpose-built studios, plus a full content and utility surface:
+
+### Studios
+- **Shorts** (`/shorts`) — Script to 9:16 captioned vertical video
+- **Podcast** (`/podcast`) — Two-host script-to-video pipeline
+- **Scene Builder** (`/scenario`) — Story → scene breakdown → keyframes → render
+- **Multi-Shot** (`/multi-shot`) — Enhanced multi-shot sequence generator
+
+### Content
+- **Blog** (`/blog`, `/blog/[slug]`) — 77 technical posts with inline editorial illustrations, specs and pricing validated against the fal.ai API
+- **Gallery** (`/explore`, `/explore/[id]`) — 159+ videos across 15 categories
+
+### Utilities
+- **Shot Composer** (`/shot-composer`) — Visual shot composition primitive
+- **JSON Prompt Builder** (`/json-prompt`) — Structured JSON prompt authoring
+- **Prompt Generator** (`/prompt-gen`) — Category-based prompt construction
+- **Generate** (`/generate`) — Simple text-to-video with model picker
+- **Editor** (`/editor`) — Lightweight video editor
+- **History** (`/history`) — localStorage-backed generation history
+- **Settings** (`/settings`) — FAL key + defaults + data export
 
 ## Tech Stack
 
-- **Next.js 16** + App Router, Turbopack
-- **TypeScript** strict mode
-- **shadcn/ui** (new-york style) + Tailwind CSS v4 + unified `radix-ui` package
-- **Monorepo** — pnpm workspaces + Turborepo
-- **AI** — FAL API (image/video generation), OpenRouter via FAL (LLM)
-- **Zero backend** — All API calls client-side, static export, no database
+- **Next.js 15** (App Router, Turbopack)
+- **React 19** + TypeScript (strict mode)
+- **Tailwind CSS v4** with custom design tokens (`--accent`, `--surface`, `--separator`)
+- **[@fal-ai/client](https://fal.ai)** — image and video generation
+- **Supabase** *(optional)* — likes, views, and copy counts; gracefully falls back to `localStorage` when env vars are absent
+- **Framer Motion** + **Hugeicons** + **Lucide**
 
-## Supported AI Models
+## Quick Start
 
-### Video Generation
-- **Seedance 2.0** — reference-to-video, image-to-video, text-to-video
-- **Kling v3 Pro** — multi_prompt shots + @Element references
-
-### Image Generation
-- **Nano Banana Pro** / **Nano Banana 2** — text-to-image & image editing
-- **Seedream v5 Lite** — text-to-image & image editing
-
-### LLM (Prompt Engineering)
-- Sonnet 4.6, Gemini 3 Flash, Gemini 3.1 Pro, GPT-5.4 Mini
-
----
-
-## Getting Started
-
-### Prerequisites
-- **Node.js** >= 20
-- **pnpm** >= 10
-
-### Development
 ```bash
 pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-### Build
+Build for production:
+
 ```bash
 pnpm build
+pnpm start
 ```
 
-### Environment
-Copy `.env.example` to `.env.local`:
-- `NEXT_PUBLIC_SITE_URL` — Your site URL
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Google Analytics (optional)
+## Environment Variables
 
----
+Create a `.env.local` in the repo root:
 
-## Contributing
+```bash
+# Required to enable FAL generation (or paste into Settings at runtime)
+NEXT_PUBLIC_FAL_KEY=your_fal_api_key
 
-### Submit Prompts (One-Click)
-1. Use the in-app contribution forms at `/contribute`
-2. Click "Submit to Gallery" — opens a pre-filled GitHub Issue
-3. Maintainer adds `approved` label — GitHub Action creates a PR automatically
+# Optional — enables Supabase-backed likes / views / copies
+# Leave unset to fall back to localStorage
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_publishable_key
+```
 
-### Types of Contributions
-- **Video Prompts** — Full prompts with video examples
-- **Multi-Shot Prompts** — Multi-shot sequences generated via the pipeline
-- **Prompt Elements** — Building blocks for the prompt generator (lighting, camera, mood, etc.)
-- **Categories** — New ways to organize prompts and elements
+All configuration is read via `process.env.*`. No API keys are ever hardcoded.
 
-### Code Contributions
-- Follow TypeScript strict mode and existing patterns
-- Test changes with `pnpm build`
-- Submit a PR with clear description
+## Project Structure
 
----
+```
+src/
+  app/            Next.js App Router pages (studios, blog, explore, utilities)
+  components/     Shared UI (site-header, studios, video-editor, ...)
+  content/        Blog posts (.mdx) and curated blog-posts.json
+  lib/            FAL client helpers, Supabase client, shared utils
+public/           Static assets
+supabase/         Optional Supabase schema for likes/views
+scripts/          Example generation tooling
+```
 
-## Changelog
-
-### 2026-04-07
-- Multi-Shot Generator with full pipeline: LLM prompt planning, reference image generation, video generation
-- Seedance 2.0 + Kling v3 Pro video model support with smart endpoint selection
-- Agentic prompt system via OpenRouter (FAL-proxied) with retry, validation, and content policy handling
-- Reference image system: @Image/@Element hover preview tooltips + click-to-modal
-- GitHub Issue-based contribution system with automated PR via GitHub Actions
-- Prompt Gallery: Multi-Shot badge, updated skeleton components matching real card layout
-- Prompt Generator: LLM model selection (Sonnet 4.6, Gemini 3 Flash, Gemini 3.1 Pro, GPT-5.4 Mini)
-- Migrated to unified `radix-ui` package (shadcn/ui latest)
-- Upgraded Next.js 15 to 16.2.2
-- Removed Video Models page
-- Removed DengeAI branding, renamed to Awesome Video Prompts
-- Image `sizes` prop fixes for Next.js Image optimization
-
----
+Built by [@ailker](https://x.com/ailker).
 
 ## License
 
 MIT License — Free to use, modify, and distribute.
-
-**Built by [@ailker](https://x.com/ailker)**
-
----
-
-*Contributions from the community help push the boundaries of AI video generation.*
