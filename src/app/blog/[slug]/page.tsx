@@ -111,10 +111,10 @@ export default async function BlogPostPage({
 
         {/* Cover (full width) */}
         <div
-          className={`mb-8 h-48 rounded-2xl md:h-56 ${post.coverImage ? "" : `bg-gradient-to-br ${post.coverGradient}`}`}
+          className={`mb-8 aspect-[16/9] w-full overflow-hidden rounded-2xl ${post.coverImage ? "" : `bg-gradient-to-br ${post.coverGradient}`}`}
           role="img"
           aria-label={`Cover image for ${post.title}`}
-          style={post.coverImage ? { backgroundImage: `url(${getThumbnailUrl(post.coverImage, 1200, 85)})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+          style={post.coverImage ? { backgroundImage: `url(${getThumbnailUrl(post.coverImage, 1600, 88)})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
         />
 
         {/* Two-column layout: article + sidebar */}
