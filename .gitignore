@@ -11,6 +11,6 @@ next-env.d.ts
 # Generation logs
 scripts/generate.log
 scripts/results.json
-*.png
+generated-*.png
 .claude/
 .vercel
