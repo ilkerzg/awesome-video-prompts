@@ -1,2 +1,0 @@
-Thumbnail placeholder for ocean-waves
-This would be replaced with actual image thumbnail in production.

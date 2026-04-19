@@ -1,2 +1,0 @@
-Thumbnail placeholder for dramatic-push-in
-This would be replaced with actual image thumbnail in production.
