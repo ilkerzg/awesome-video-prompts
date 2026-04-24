@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { getFal } from "@/lib/fal-client";
 import { CustomSelect } from "@/components/custom-select";
 import { HowItWorks } from "@/components/how-it-works";
@@ -336,6 +337,7 @@ export default function ShortsPage() {
   return (
     <>
       <TopBar title="Shorts Studio" />
+      <FalKeyGuard toolName="Shorts Studio">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
 
         {/* ── Input ── */}
@@ -611,6 +613,7 @@ export default function ShortsPage() {
           ]}
         />
       </div>
+      </FalKeyGuard>
     </>
   );
 }

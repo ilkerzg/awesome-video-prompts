@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { getFal, runLLM } from "@/lib/fal-client";
 import { VIDEO_MODELS, getModel, getEndpoint } from "@/lib/video-models";
 import { useSubmitShortcut } from "@/lib/use-submit-shortcut";
@@ -251,6 +252,7 @@ export default function MultiShotPage() {
   return (
     <>
       <TopBar title="Multi-Shot Generator" />
+      <FalKeyGuard toolName="Multi-Shot Generator">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
         {/* Story Input */}
         <div className="rounded-xl border border-[color:var(--border-soft)] bg-[color:var(--surface)] p-4">
@@ -549,6 +551,7 @@ export default function MultiShotPage() {
           </div>
         )}
       </div>
+      </FalKeyGuard>
     </>
   );
 }

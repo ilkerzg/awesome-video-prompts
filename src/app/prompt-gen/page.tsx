@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { getFal, runLLM } from "@/lib/fal-client";
 import { VIDEO_MODELS, getModel, getEndpoint } from "@/lib/video-models";
 import { getPromptProfile } from "@/lib/prompt-profiles";
@@ -230,6 +231,7 @@ export default function PromptGenPage() {
   return (
     <>
       <TopBar title="Prompt Generator" />
+      <FalKeyGuard toolName="Prompt Generator">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
 
         {/* Step 1: Model + Input */}
@@ -465,6 +467,7 @@ e.g. 'epic space battle with two fleets clashing near a gas giant'"
           </div>
         )}
       </div>
+      </FalKeyGuard>
     </>
   );
 }

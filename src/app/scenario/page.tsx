@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import Link from "next/link";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { HowItWorks } from "@/components/how-it-works";
 import {
   Loader2, Sparkles, AlertCircle, Check, RotateCcw, Play,
@@ -428,19 +428,8 @@ export default function ScenarioPage() {
   return (
     <>
       <TopBar title="Scene Builder" />
+      <FalKeyGuard toolName="Scene Builder">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
-
-        {/* No key warning */}
-        {!hasKey && (
-          <div className="mb-5 flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
-            <AlertCircle size={14} className="mt-0.5 shrink-0 text-amber-400" />
-            <p className="flex-1 text-xs text-amber-400">
-              Add your fal.ai API key in{" "}
-              <Link href="/settings" className="underline">Settings</Link>
-              {" "}to run the pipeline. Your key stays in your browser only.
-            </p>
-          </div>
-        )}
 
         {/* Concept Input */}
         <div className="rounded-2xl border border-[color:var(--border-soft)] bg-[color:var(--surface)] p-5">
@@ -694,6 +683,7 @@ export default function ScenarioPage() {
           </div>
         </div>
       )}
+      </FalKeyGuard>
     </>
   );
 }

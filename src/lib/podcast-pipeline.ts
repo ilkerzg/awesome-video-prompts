@@ -50,9 +50,51 @@ export const PODCAST_STAGES: PodcastStage[] = [
   "script", "portraits", "tts", "stt", "splitting", "lipsync", "merging", "completed",
 ];
 
-export const GEMINI_VOICES = [
-  "Charon", "Kore", "Fenrir", "Aoede", "Leda", "Orus", "Zephyr",
+export interface GeminiVoice {
+  id: string;
+  gender: "Female" | "Male";
+  character: string;
+  description: string;
+}
+
+export const GEMINI_VOICES: GeminiVoice[] = [
+  { id: "Zephyr", gender: "Female", character: "Bright", description: "Crisp, luminous female voice — effortless energy for upbeat hosts." },
+  { id: "Puck", gender: "Male", character: "Upbeat", description: "Playful, springy male voice — perfect for charismatic presenters." },
+  { id: "Charon", gender: "Male", character: "Informative", description: "Grounded, documentary-style male narration with calm authority." },
+  { id: "Kore", gender: "Female", character: "Firm", description: "Confident, decisive female voice — executive tone with edge." },
+  { id: "Fenrir", gender: "Male", character: "Excitable", description: "High-energy male voice bursting with enthusiasm and momentum." },
+  { id: "Leda", gender: "Female", character: "Youthful", description: "Fresh, spirited female voice — Gen-Z charm and natural warmth." },
+  { id: "Orus", gender: "Male", character: "Firm", description: "Steady, commanding male voice built for serious delivery." },
+  { id: "Aoede", gender: "Female", character: "Breezy", description: "Light, airy female voice — relaxed and conversational." },
+  { id: "Callirrhoe", gender: "Female", character: "Easy-going", description: "Warm, unhurried female voice — approachable and friendly." },
+  { id: "Autonoe", gender: "Female", character: "Bright", description: "Radiant, polished female voice with broadcast-ready clarity." },
+  { id: "Enceladus", gender: "Male", character: "Breathy", description: "Soft, intimate male voice — great for ASMR or cinematic whispers." },
+  { id: "Iapetus", gender: "Male", character: "Clear", description: "Pristine, neutral male voice — tutorial and e-learning ready." },
+  { id: "Umbriel", gender: "Male", character: "Easy-going", description: "Laid-back male voice — feels like a coffee-shop chat." },
+  { id: "Algenib", gender: "Male", character: "Gravelly", description: "Rough, textured male voice — noir narrator vibes." },
+  { id: "Despina", gender: "Female", character: "Smooth", description: "Silky, polished female voice — late-night radio elegance." },
+  { id: "Erinome", gender: "Female", character: "Clear", description: "Articulate, composed female voice for news and tutorials." },
+  { id: "Laomedeia", gender: "Female", character: "Upbeat", description: "Bubbly, optimistic female voice — ad-spot energy." },
+  { id: "Achernar", gender: "Female", character: "Soft", description: "Gentle, soothing female voice — meditation and bedtime stories." },
+  { id: "Algieba", gender: "Male", character: "Smooth", description: "Refined, velvety male voice — luxury brand narrator." },
+  { id: "Schedar", gender: "Male", character: "Even", description: "Balanced, measured male voice — consistent corporate read." },
+  { id: "Gacrux", gender: "Female", character: "Mature", description: "Seasoned, wise female voice — grounded and experienced." },
+  { id: "Pulcherrima", gender: "Female", character: "Forward", description: "Direct, assertive female voice — leans in and owns the room." },
+  { id: "Achird", gender: "Male", character: "Friendly", description: "Warm, neighborly male voice — the approachable guy-next-door." },
+  { id: "Zubenelgenubi", gender: "Male", character: "Casual", description: "Relaxed, off-the-cuff male voice — podcast-ready authenticity." },
+  { id: "Vindemiatrix", gender: "Female", character: "Gentle", description: "Tender, comforting female voice — nurturing and kind." },
+  { id: "Sadachbia", gender: "Male", character: "Lively", description: "Animated, spirited male voice — full of character and bounce." },
+  { id: "Sadaltager", gender: "Male", character: "Knowledgeable", description: "Thoughtful, expert-sounding male voice — lecturer credibility." },
+  { id: "Sulafat", gender: "Female", character: "Warm", description: "Inviting, honey-toned female voice — heartfelt storyteller." },
+  { id: "Alnilam", gender: "Male", character: "Firm", description: "Resolute, principled male voice — leadership delivery." },
+  { id: "Rasalgethi", gender: "Male", character: "Informative", description: "Clear, educational male voice — explainer-video staple." },
 ];
+
+export const GEMINI_VOICE_IDS: string[] = GEMINI_VOICES.map((v) => v.id);
+
+export function getVoiceMeta(id: string): GeminiVoice | undefined {
+  return GEMINI_VOICES.find((v) => v.id === id);
+}
 
 export const LANGUAGE_OPTIONS = [
   { id: "English (US)", label: "English (US)" },
