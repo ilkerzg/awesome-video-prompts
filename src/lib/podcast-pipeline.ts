@@ -258,7 +258,7 @@ export async function splitAudio(
 }
 
 // Step 5b: lip-synced video from portrait + audio
-export type LipsyncModelId = "creatify-aurora" | "veed-fabric" | "kling-avatar-v2";
+export type LipsyncModelId = "creatify-aurora" | "veed-fabric" | "veed-fabric-hq" | "kling-avatar-v2";
 
 export interface LipsyncModel {
   id: LipsyncModelId;
@@ -278,10 +278,17 @@ export const LIPSYNC_MODELS: LipsyncModel[] = [
   },
   {
     id: "veed-fabric",
-    name: "VEED Fabric 1.0",
+    name: "VEED Fabric 1.0 Fast",
     endpoint: "veed/fabric-1.0/fast",
     endpointUrl: "https://fal.ai/models/veed/fabric-1.0/fast",
     description: "Fast portrait animation at 480p — the budget option.",
+  },
+  {
+    id: "veed-fabric-hq",
+    name: "VEED Fabric 1.0",
+    endpoint: "veed/fabric-1.0",
+    endpointUrl: "https://fal.ai/models/veed/fabric-1.0",
+    description: "Higher-quality VEED Fabric at 720p for sharper, more refined results.",
   },
   {
     id: "kling-avatar-v2",
@@ -321,6 +328,12 @@ export async function generateLipsync(
       image_url: imageUrl,
       audio_url: audioUrl,
       prompt: ".",
+    };
+  } else if (model.id === "veed-fabric-hq") {
+    input = {
+      image_url: imageUrl,
+      audio_url: audioUrl,
+      resolution: "720p",
     };
   } else {
     input = {
