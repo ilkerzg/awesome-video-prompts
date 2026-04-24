@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef } from "react";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { SHOT_CATEGORIES } from "@/lib/shot-categories";
 import { ArrowRight, ArrowLeft, Check, Copy, Wand2, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -45,6 +46,7 @@ export default function ShotComposerPage() {
   return (
     <>
       <TopBar title="Shot Composer" />
+      <FalKeyGuard toolName="Shot Composer">
       <div className="flex h-[calc(100dvh-3.5rem)] flex-col">
         {/* TOP — Category pills with scroll */}
         <div className="shrink-0 border-b border-[color:var(--separator)] px-2 py-2.5 md:px-4">
@@ -162,6 +164,7 @@ export default function ShotComposerPage() {
           </div>
         </div>
       </div>
+      </FalKeyGuard>
     </>
   );
 }

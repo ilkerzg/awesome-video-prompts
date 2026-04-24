@@ -5,6 +5,7 @@ import Link from "next/link";
 import { GeneratePanel } from "@/components/generate-panel";
 import { SectionHeader } from "@/components/section-header";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { getRecentHistory, subscribeHistory, type HistoryItem } from "@/lib/history-store";
 import { getThumbnailUrl } from "@/lib/media-url";
 import { Clock, Sparkles } from "lucide-react";
@@ -51,6 +52,7 @@ export default function GeneratePage() {
   return (
     <>
       <TopBar title="Generate Video" />
+      <FalKeyGuard toolName="Generate Video">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
         <GeneratePanel />
 
@@ -77,6 +79,7 @@ export default function GeneratePage() {
           </div>
         )}
       </div>
+      </FalKeyGuard>
     </>
   );
 }

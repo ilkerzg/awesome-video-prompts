@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { TopBar } from "@/components/topbar";
+import { FalKeyGuard } from "@/components/fal-key-guard";
 import { getFal } from "@/lib/fal-client";
 import { CustomSelect } from "@/components/custom-select";
 import { HowItWorks } from "@/components/how-it-works";
@@ -9,7 +10,7 @@ import {
   generatePodcastScript, generateStudioPortrait, generateTTS, transcribeAudio,
   groupSpeakerSegments, splitAudio, generateLipsync, mergeVideos, addAudioToVideo,
   PODCAST_STAGES, PODCAST_STAGE_LABELS, GEMINI_VOICES, LANGUAGE_OPTIONS,
-  STUDIO_REF_LEFT, STUDIO_REF_RIGHT,
+  STUDIO_REF_LEFT, STUDIO_REF_RIGHT, getVoiceMeta,
   type PodcastStage, type Speaker, type SpeakerSegment,
 } from "@/lib/podcast-pipeline";
 import {
@@ -109,7 +110,10 @@ function ApproveButton({ onClick, label, disabled }: { onClick: () => void; labe
 
 // ─── Constants ──────────────────────────────────────────────
 
-const VOICE_OPTIONS = GEMINI_VOICES.map((v) => ({ id: v, label: v }));
+const VOICE_OPTIONS = GEMINI_VOICES.map((v) => ({
+  id: v.id,
+  label: `${v.id} — ${v.character} · ${v.gender}`,
+}));
 
 const STAGE_ICONS: Partial<Record<PodcastStage, React.ComponentType<{ size?: number; className?: string }>>> = {
   script: Brain, portraits: ImageIcon, tts: Mic, stt: Brain, splitting: Scissors,
@@ -378,6 +382,7 @@ export default function PodcastPage() {
   return (
     <>
       <TopBar title="Podcast Studio" />
+      <FalKeyGuard toolName="Podcast Studio">
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
 
         {/* ── Input Section ── */}
@@ -396,6 +401,9 @@ export default function PodcastPage() {
                   <input value={speaker1.name} onChange={(e) => setSpeaker1((s) => ({ ...s, name: e.target.value }))}
                     placeholder="Name (e.g. Host)" className="h-8 w-full rounded-lg border border-[color:var(--border-soft)] bg-[color:var(--surface)] px-3 text-xs text-foreground focus:outline-none" />
                   <CustomSelect options={VOICE_OPTIONS} value={speaker1.voice} onChange={(v) => v && setSpeaker1((s) => ({ ...s, voice: v }))} placeholder="Voice" />
+                  {getVoiceMeta(speaker1.voice) && (
+                    <p className="text-[10px] leading-snug text-foreground/40">{getVoiceMeta(speaker1.voice)!.description}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -412,6 +420,9 @@ export default function PodcastPage() {
                   <input value={speaker2.name} onChange={(e) => setSpeaker2((s) => ({ ...s, name: e.target.value }))}
                     placeholder="Name (e.g. Guest)" className="h-8 w-full rounded-lg border border-[color:var(--border-soft)] bg-[color:var(--surface)] px-3 text-xs text-foreground focus:outline-none" />
                   <CustomSelect options={VOICE_OPTIONS} value={speaker2.voice} onChange={(v) => v && setSpeaker2((s) => ({ ...s, voice: v }))} placeholder="Voice" />
+                  {getVoiceMeta(speaker2.voice) && (
+                    <p className="text-[10px] leading-snug text-foreground/40">{getVoiceMeta(speaker2.voice)!.description}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -683,6 +694,7 @@ export default function PodcastPage() {
           ]}
         />
       </div>
+      </FalKeyGuard>
     </>
   );
 }
