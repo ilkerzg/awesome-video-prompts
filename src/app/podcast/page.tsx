@@ -198,8 +198,8 @@ export default function PodcastPage() {
         case "portraits": {
           setStage("portraits"); setDetail("Generating podcast studio portraits...");
           const [p1, p2] = await Promise.all([
-            generateStudioPortrait(speaker1.imageUrl!, STUDIO_REF_LEFT, speaker1.name, "left"),
-            generateStudioPortrait(speaker2.imageUrl!, STUDIO_REF_RIGHT, speaker2.name, "right"),
+            generateStudioPortrait(speaker1.imageUrl!, STUDIO_REF_LEFT, speaker1.name),
+            generateStudioPortrait(speaker2.imageUrl!, STUDIO_REF_RIGHT, speaker2.name),
           ]);
           if (cancelRef.current) return;
           setStudioPortrait1(p1); setStudioPortrait2(p2);
