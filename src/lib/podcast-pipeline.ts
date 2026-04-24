@@ -136,12 +136,10 @@ export async function generateStudioPortrait(
   characterImageUrl: string,
   studioRefUrl: string,
   speakerName: string,
-  position: "left" | "right",
 ): Promise<string> {
-  const facing = position === "left" ? "facing right, looking toward the right side, three-quarter view turned to the right" : "facing left, looking toward the left side, three-quarter view turned to the left";
   const data = await falRun("fal-ai/bytedance/seedream/v5/lite/edit", {
     image_urls: [studioRefUrl, characterImageUrl],
-    prompt: `Place the person from Figure 2 into the podcast studio scene from Figure 1. The person should be ${facing}, wearing over-ear headphones and sitting in front of a professional podcast microphone. Keep the person's exact face, hair, and appearance from Figure 2 unchanged. Professional podcast studio with colorful LED lights, brick wall background, plants on desk. Close-up portrait, natural studio lighting.`,
+    prompt: `Place the person from Figure 2 into the podcast studio scene from Figure 1. The person should face the camera directly with steady eye contact, head and shoulders square to the lens, wearing over-ear headphones and sitting in front of a professional podcast microphone. Keep the person's exact face, hair, and appearance from Figure 2 unchanged. Professional podcast studio with colorful LED lights, brick wall background, plants on desk. Close-up portrait, natural studio lighting.`,
     image_size: "auto_2K",
     num_images: 1,
   });
