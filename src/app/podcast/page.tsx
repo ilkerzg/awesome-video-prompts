@@ -11,7 +11,8 @@ import {
   groupSpeakerSegments, splitAudio, generateLipsync, mergeVideos, addAudioToVideo,
   PODCAST_STAGES, PODCAST_STAGE_LABELS, GEMINI_VOICES, LANGUAGE_OPTIONS,
   STUDIO_REF_LEFT, STUDIO_REF_RIGHT, getVoiceMeta,
-  type PodcastStage, type Speaker, type SpeakerSegment,
+  LIPSYNC_MODELS, DEFAULT_LIPSYNC_MODEL, getLipsyncModel,
+  type PodcastStage, type Speaker, type SpeakerSegment, type LipsyncModelId,
 } from "@/lib/podcast-pipeline";
 import {
   Play, Pause, Square, Loader2, Upload, X, Check, Mic, Brain,
@@ -115,6 +116,8 @@ const VOICE_OPTIONS = GEMINI_VOICES.map((v) => ({
   label: `${v.id} — ${v.character} · ${v.gender}`,
 }));
 
+const LIPSYNC_OPTIONS = LIPSYNC_MODELS.map((m) => ({ id: m.id, label: m.name }));
+
 const STAGE_ICONS: Partial<Record<PodcastStage, React.ComponentType<{ size?: number; className?: string }>>> = {
   script: Brain, portraits: ImageIcon, tts: Mic, stt: Brain, splitting: Scissors,
   lipsync: Video, merging: Merge, completed: Check,
@@ -137,6 +140,7 @@ export default function PodcastPage() {
   const [language, setLanguage] = useState("English (US)");
   const [styleInstructions, setStyleInstructions] = useState("Warm, enthusiastic podcast conversation tone. Natural pacing with genuine reactions.");
   const [autoMode, setAutoMode] = useState(false);
+  const [lipsyncModel, setLipsyncModel] = useState<LipsyncModelId>(DEFAULT_LIPSYNC_MODEL);
 
   // Speakers
   const [speaker1, setSpeaker1] = useState<Speaker>({ id: "speaker_0", name: "Host", voice: "Charon", imageUrl: null });
@@ -259,7 +263,7 @@ export default function PodcastPage() {
                 const chunkUrl = audioChunks[idx];
                 if (!chunkUrl) return null;
                 try {
-                  const videoUrl = await generateLipsync(speaker.imageUrl, chunkUrl);
+                  const videoUrl = await generateLipsync(speaker.imageUrl, chunkUrl, lipsyncModel);
                   if (cancelRef.current) return null;
                   setLipsyncProgress((p) => p + 1);
                   setDetail(`Lip-synced ${Math.min(idx + 1, segs.length)}/${segs.length} segments...`);
@@ -297,7 +301,7 @@ export default function PodcastPage() {
     } finally {
       setWorking(false);
     }
-  }, [mode, topic, script, speaker1, speaker2, language, styleInstructions, autoMode]);
+  }, [mode, topic, script, speaker1, speaker2, language, styleInstructions, autoMode, lipsyncModel]);
 
   // ─── Run Full Pipeline (from a given step) ─────────────
 
@@ -459,10 +463,15 @@ export default function PodcastPage() {
           )}
 
           {/* Settings */}
-          <div className="mt-3 grid gap-3 grid-cols-2 sm:grid-cols-3">
+          <div className="mt-3 grid gap-3 grid-cols-2 sm:grid-cols-4">
             <div>
               <label className="mb-1 block text-[9px] font-bold uppercase tracking-wider text-foreground/20">Language</label>
               <CustomSelect options={LANGUAGE_OPTIONS} value={language} onChange={(v) => v && setLanguage(v)} placeholder="Language" />
+            </div>
+            <div>
+              <label className="mb-1 block text-[9px] font-bold uppercase tracking-wider text-foreground/20">Lip-sync</label>
+              <CustomSelect options={LIPSYNC_OPTIONS} value={lipsyncModel} onChange={(v) => v && setLipsyncModel(v as LipsyncModelId)} placeholder="Model" />
+              <p className="mt-1 text-[10px] leading-snug text-foreground/40">{getLipsyncModel(lipsyncModel).description}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label className="mb-1 block text-[9px] font-bold uppercase tracking-wider text-foreground/20">Style</label>
@@ -677,9 +686,9 @@ export default function PodcastPage() {
             },
             {
               label: "Lip-sync",
-              model: "veed/fabric-1.0/fast",
-              modelUrl: "https://fal.ai/models/veed/fabric-1.0/fast",
-              description: "VEED Fabric animates each studio portrait to match its audio chunk (3 segments in parallel).",
+              model: getLipsyncModel(lipsyncModel).endpoint,
+              modelUrl: getLipsyncModel(lipsyncModel).endpointUrl,
+              description: `${getLipsyncModel(lipsyncModel).name} animates each studio portrait to match its audio chunk (3 segments in parallel).`,
             },
             {
               label: "Merge",

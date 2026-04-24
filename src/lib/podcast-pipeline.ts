@@ -257,16 +257,79 @@ export async function splitAudio(
   return segments.map((s) => s.url);
 }
 
-// Step 5b: VEED Fabric 1.0 → lip-synced video from image + audio
+// Step 5b: lip-synced video from portrait + audio
+export type LipsyncModelId = "creatify-aurora" | "veed-fabric" | "kling-avatar-v2";
+
+export interface LipsyncModel {
+  id: LipsyncModelId;
+  name: string;
+  endpoint: string;
+  endpointUrl: string;
+  description: string;
+}
+
+export const LIPSYNC_MODELS: LipsyncModel[] = [
+  {
+    id: "creatify-aurora",
+    name: "Creatify Aurora",
+    endpoint: "fal-ai/creatify/aurora",
+    endpointUrl: "https://fal.ai/models/fal-ai/creatify/aurora",
+    description: "Natural talking-head lip-sync at 720p with cinematic guidance.",
+  },
+  {
+    id: "veed-fabric",
+    name: "VEED Fabric 1.0",
+    endpoint: "veed/fabric-1.0/fast",
+    endpointUrl: "https://fal.ai/models/veed/fabric-1.0/fast",
+    description: "Fast portrait animation at 480p — the budget option.",
+  },
+  {
+    id: "kling-avatar-v2",
+    name: "Kling Avatar v2 Pro",
+    endpoint: "fal-ai/kling-video/ai-avatar/v2/pro",
+    endpointUrl: "https://fal.ai/models/fal-ai/kling-video/ai-avatar/v2/pro",
+    description: "High-fidelity avatar lip-sync from Kling v2 Pro.",
+  },
+];
+
+export const DEFAULT_LIPSYNC_MODEL: LipsyncModelId = "creatify-aurora";
+
+export function getLipsyncModel(id: LipsyncModelId): LipsyncModel {
+  return LIPSYNC_MODELS.find((m) => m.id === id) ?? LIPSYNC_MODELS[0];
+}
+
+const CREATIFY_DEFAULT_PROMPT = "Studio interview, medium close-up (shoulders-up crop). Solid neutral backdrop, uniform soft key light. Presenter faces the lens with steady eye-contact and natural expression. Hands stay below frame, body still. Ultra-sharp, 4K.";
+
 export async function generateLipsync(
   imageUrl: string,
   audioUrl: string,
+  modelId: LipsyncModelId = DEFAULT_LIPSYNC_MODEL,
 ): Promise<string> {
-  const data = await falRun("veed/fabric-1.0/fast", {
-    image_url: imageUrl,
-    audio_url: audioUrl,
-    resolution: "480p",
-  });
+  const model = getLipsyncModel(modelId);
+  let input: Record<string, unknown>;
+  if (model.id === "creatify-aurora") {
+    input = {
+      image_url: imageUrl,
+      audio_url: audioUrl,
+      prompt: CREATIFY_DEFAULT_PROMPT,
+      guidance_scale: 1,
+      audio_guidance_scale: 2,
+      resolution: "720p",
+    };
+  } else if (model.id === "kling-avatar-v2") {
+    input = {
+      image_url: imageUrl,
+      audio_url: audioUrl,
+      prompt: ".",
+    };
+  } else {
+    input = {
+      image_url: imageUrl,
+      audio_url: audioUrl,
+      resolution: "480p",
+    };
+  }
+  const data = await falRun(model.endpoint, input);
   return (data.video as { url: string }).url;
 }
 
